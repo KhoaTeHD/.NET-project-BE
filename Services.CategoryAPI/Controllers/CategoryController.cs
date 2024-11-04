@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Services.CategoryAPI.Data;
 using Services.CategoryAPI.Models;
 using Services.CategoryAPI.Models.Dto;
@@ -23,11 +25,11 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseDto Get() 
+        public async Task<ResponseDto> Get() 
         {
             try
             {
-                IEnumerable<Category> categories = _dbContext.Categories.ToList();
+                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
                 _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
             }
             catch (Exception ex)
@@ -40,11 +42,11 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public ResponseDto Get(int id)
+        public async Task<ResponseDto> Get(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
+                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
                 _response.Result = _mapper.Map<CategoryDto>(category);
             }
             catch (Exception ex)
@@ -56,13 +58,13 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public ResponseDto Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
         {
             try
             {
                 Category category = _mapper.Map<Category>(categoryDto);
-                _dbContext.Categories.Add(category);
-                _dbContext.SaveChanges();
+                await _dbContext.Categories.AddAsync(category);
+                await _dbContext.SaveChangesAsync();
 
                 _response.Result = _mapper.Map<CategoryDto>(category);
             }
@@ -75,13 +77,22 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public ResponseDto Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                _dbContext.Categories.Update(category);
-                _dbContext.SaveChanges();
+                
+                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
+
+                if (category == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Category not found.";
+                    return _response;
+                }
+                _mapper.Map(categoryDto, category);
+
+                await _dbContext.SaveChangesAsync();
 
                 _response.Result = _mapper.Map<CategoryDto>(category);
             }
@@ -94,13 +105,13 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public ResponseDto Delete(int id)
+        public async Task<ResponseDto> Delete(int id)
         {
             try
             {
                 Category category = _dbContext.Categories.First(u => u.Id == id);
                 _dbContext.Categories.Remove(category);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
