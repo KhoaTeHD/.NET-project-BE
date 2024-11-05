@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Models;
+using Services.BrandAPI.Models;
+using System.Collections.Generic;
+using System.Reflection.Emit;
 
-namespace Services.CategoryAPI.Data
+namespace Services.BrandAPI.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContextcs : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContextcs(DbContextOptions<AppDbContextcs> options) : base(options)
         {
         }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Brand> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +32,5 @@ namespace Services.CategoryAPI.Data
                 Status = true,
             });
         }
-
     }
 }

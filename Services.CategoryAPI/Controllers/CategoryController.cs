@@ -23,7 +23,7 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseDto Get() 
+        public ResponseDto Get()
         {
             try
             {
