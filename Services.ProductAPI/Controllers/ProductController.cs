@@ -1,35 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Services.NationAPI.Data;
-using Services.NationAPI.Models;
-using Services.NationAPI.Models.Dto;
+using Services.ProductAPI.Data;
+using Services.ProductAPI.Models;
+using Services.ProductAPI.Models.Dto;
 
-namespace Services.NationAPI.Controllers
+namespace Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NationController : ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private Models.Dto.ResponseNationDto _response;
+        private Models.Dto.ResponseProductDto _response;
         private IMapper _mapper;
 
-        public NationController(AppDbContext dbContext, IMapper mapper)
+        public ProductController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseNationDto();
+            _response = new ResponseProductDto();
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ResponseNationDto> Get()
+        public async Task<ResponseProductDto> Get()
 
         {
             try
             {
-                IEnumerable<Nation> nations = await _dbContext.Nations.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<NationDto>>(nations);
+                IEnumerable<Product> nations = await _dbContext.Products.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable< ProductDto>>(nations);
             }
             catch (Exception ex)
             {
@@ -41,12 +41,12 @@ namespace Services.NationAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseNationDto> Get(int id)
+        public async Task<ResponseProductDto> Get(int id)
         {
             try
             {
-                Nation nation = await _dbContext.Nations.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<NationDto>(nation);
+                Product product = await _dbContext.Products.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -57,15 +57,15 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseNationDto> Post([FromBody] NationDto brandDTO)
+        public async Task<ResponseProductDto> Post([FromBody] ProductDto productDTO)
         {
             try
             {
-                Nation nation = _mapper.Map<Nation>(brandDTO);
-                await _dbContext.Nations.AddAsync(nation);
+                Product product = _mapper.Map<Product>(productDTO);
+                await _dbContext.Products.AddAsync(product);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<NationDto>(nation);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -76,24 +76,24 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseNationDto> Put([FromBody] NationDto nationDTO)
+        public async Task<ResponseProductDto> Put([FromBody] ProductDto productDTO)
         {
             try
             {
 
-                Nation? nation = await _dbContext.Nations.FindAsync(nationDTO.Id);
+                Product? product = await _dbContext.Products.FindAsync(productDTO.Id);
 
-                if (nation == null)
+                if (product == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Nation not found.";
+                    _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(nationDTO, nation);
+                _mapper.Map(productDTO, product);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<NationDto>(nation);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -104,12 +104,12 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseNationDto> Delete(int id)
+        public async Task<ResponseProductDto> Delete(int id)
         {
             try
             {
-                Nation nation = _dbContext.Nations.First(u => u.Id == id);
-                _dbContext.Nations.Remove(nation);
+                Product product = _dbContext.Products.First(u => u.Id == id);
+                _dbContext.Products.Remove(product);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

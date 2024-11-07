@@ -86,7 +86,7 @@ namespace Services.SizeAPI.Controllers
                 if (size == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Brand not found.";
+                    _response.Message = "Size not found.";
                     return _response;
                 }
                 _mapper.Map(sizeDTO, size);

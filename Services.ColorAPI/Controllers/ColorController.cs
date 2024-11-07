@@ -86,7 +86,7 @@ namespace Services.ColorAPI.Controllers
                 if (color == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Brand not found.";
+                    _response.Message = "Color not found.";
                     return _response;
                 }
                 _mapper.Map(colorDTO, color);
