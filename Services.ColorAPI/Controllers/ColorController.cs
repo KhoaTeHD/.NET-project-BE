@@ -1,38 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Services.BrandAPI.Models.Dto;
-using Services.BrandAPI.Data;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using ResponseBrandDto = Services.BrandAPI.Models.Dto.ResponseBrandDto;
-using Services.BrandAPI.Models;
+using Services.ColorAPI.Data;
+using Services.ColorAPI.Models;
+using Services.ColorAPI.Models.Dto;
 
-namespace Services.BrandAPI.Controllers
+namespace Services.ColorAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class ColorController : ControllerBase
     {
-
         private readonly AppDbContext _dbContext;
-        private ResponseBrandDto _response;
+        private ResponseColorDto _response;
         private IMapper _mapper;
 
-        public BrandController(AppDbContext dbContext, IMapper mapper)
+        public ColorController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseBrandDto();
+            _response = new ResponseColorDto();
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ResponseBrandDto> Get()
+        public async Task<ResponseColorDto> Get()
 
         {
             try
             {
-                IEnumerable<Brand> brands = await _dbContext.Brands.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<BrandDto>>(brands);
+                IEnumerable<Color> brands = await _dbContext.Colors.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<ColorDto>>(brands);
             }
             catch (Exception ex)
             {
@@ -44,12 +41,12 @@ namespace Services.BrandAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseBrandDto> Get(int id)
+        public async Task<ResponseColorDto> Get(int id)
         {
             try
             {
-                Brand brand = await _dbContext.Brands.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                Color color = await _dbContext.Colors.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -60,15 +57,15 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseBrandDto> Post([FromBody] BrandDto brandDTO)
+        public async Task<ResponseColorDto> Post([FromBody] ColorDto colorDTO)
         {
             try
             {
-                Brand brand = _mapper.Map<Brand>(brandDTO);
-                await _dbContext.Brands.AddAsync(brand);
+                Color color = _mapper.Map<Color>(colorDTO);
+                await _dbContext.Colors.AddAsync(color);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -79,24 +76,24 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseBrandDto> Put([FromBody] BrandDto brandDTO)
+        public async Task<ResponseColorDto> Put([FromBody] ColorDto colorDTO)
         {
             try
             {
 
-                Brand? brand = await _dbContext.Brands.FindAsync(brandDTO.Id);
+                Color? color = await _dbContext.Colors.FindAsync(colorDTO.Id);
 
-                if (brand == null)
+                if (color == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(brandDTO, brand);
+                _mapper.Map(colorDTO, color);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -107,12 +104,12 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseBrandDto> Delete(int id)
+        public async Task<ResponseColorDto> Delete(int id)
         {
             try
             {
-                Brand brand = _dbContext.Brands.First(u => u.Id == id);
-                _dbContext.Brands.Remove(brand);
+                Color color = _dbContext.Colors.First(u => u.Id == id);
+                _dbContext.Colors.Remove(color);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

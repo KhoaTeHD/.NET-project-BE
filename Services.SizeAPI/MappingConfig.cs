@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Services.BrandAPI.Models;
-using Services.BrandAPI.Models.Dto;
+using Services.SizeAPI.Models;
+using Services.SizeAPI.Models.Dto;
 
-namespace Services.BrandAPI
+namespace Services.SizeAPI
 {
     public class MappingConfig
     {
@@ -10,8 +10,8 @@ namespace Services.BrandAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Brand, BrandDto>();
-                config.CreateMap<BrandDto, Brand>();
+                config.CreateMap<Size, SizeDto>();
+                config.CreateMap<SizeDto, Size>();
             });
             return mappingConfig;
         }

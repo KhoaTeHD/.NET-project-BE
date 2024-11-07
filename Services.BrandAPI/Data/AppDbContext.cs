@@ -5,30 +5,28 @@ using System.Reflection.Emit;
 
 namespace Services.BrandAPI.Data
 {
-    public class AppDbContextcs : DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContextcs(DbContextOptions<AppDbContextcs> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        public DbSet<Brand> Categories { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Brand>().HasData(new Brand
             {
                 Id = 1,
-                Name = "Gucci",
-                Description = "This is Gucci",
+                Name = "Hades",
                 Status = true,
             });
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Brand>().HasData(new Brand
             {
                 Id = 2,
-                Name = "Fendi",
-                Description = "This is Fendi",
+                Name = "Dirty Coins",
                 Status = true,
             });
         }

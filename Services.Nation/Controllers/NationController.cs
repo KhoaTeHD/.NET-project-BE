@@ -1,38 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Services.BrandAPI.Models.Dto;
-using Services.BrandAPI.Data;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using ResponseBrandDto = Services.BrandAPI.Models.Dto.ResponseBrandDto;
-using Services.BrandAPI.Models;
+using Services.NationAPI.Data;
+using Services.NationAPI.Models;
+using Services.NationAPI.Models.Dto;
 
-namespace Services.BrandAPI.Controllers
+namespace Services.NationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class NationController : ControllerBase
     {
-
         private readonly AppDbContext _dbContext;
-        private ResponseBrandDto _response;
+        private Models.Dto.ResponseNationDto _response;
         private IMapper _mapper;
 
-        public BrandController(AppDbContext dbContext, IMapper mapper)
+        public NationController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseBrandDto();
+            _response = new ResponseNationDto();
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ResponseBrandDto> Get()
+        public async Task<ResponseNationDto> Get()
 
         {
             try
             {
-                IEnumerable<Brand> brands = await _dbContext.Brands.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<BrandDto>>(brands);
+                IEnumerable<Nation> nations = await _dbContext.Nations.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<NationDto>>(nations);
             }
             catch (Exception ex)
             {
@@ -44,12 +41,12 @@ namespace Services.BrandAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseBrandDto> Get(int id)
+        public async Task<ResponseNationDto> Get(int id)
         {
             try
             {
-                Brand brand = await _dbContext.Brands.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                Nation nation = await _dbContext.Nations.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -60,15 +57,15 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseBrandDto> Post([FromBody] BrandDto brandDTO)
+        public async Task<ResponseNationDto> Post([FromBody] NationDto brandDTO)
         {
             try
             {
-                Brand brand = _mapper.Map<Brand>(brandDTO);
-                await _dbContext.Brands.AddAsync(brand);
+                Nation nation = _mapper.Map<Nation>(brandDTO);
+                await _dbContext.Nations.AddAsync(nation);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -79,24 +76,24 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseBrandDto> Put([FromBody] BrandDto brandDTO)
+        public async Task<ResponseNationDto> Put([FromBody] NationDto nationDTO)
         {
             try
             {
 
-                Brand? brand = await _dbContext.Brands.FindAsync(brandDTO.Id);
+                Nation? nation = await _dbContext.Nations.FindAsync(nationDTO.Id);
 
-                if (brand == null)
+                if (nation == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(brandDTO, brand);
+                _mapper.Map(nationDTO, nation);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -107,12 +104,12 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseBrandDto> Delete(int id)
+        public async Task<ResponseNationDto> Delete(int id)
         {
             try
             {
-                Brand brand = _dbContext.Brands.First(u => u.Id == id);
-                _dbContext.Brands.Remove(brand);
+                Nation nation = _dbContext.Nations.First(u => u.Id == id);
+                _dbContext.Nations.Remove(nation);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

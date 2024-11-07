@@ -1,38 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Services.BrandAPI.Models.Dto;
-using Services.BrandAPI.Data;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using ResponseBrandDto = Services.BrandAPI.Models.Dto.ResponseBrandDto;
-using Services.BrandAPI.Models;
+using Services.SizeAPI.Data;
+using Services.SizeAPI.Models;
+using Services.SizeAPI.Models.Dto;
 
-namespace Services.BrandAPI.Controllers
+namespace Services.SizeAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class SizeController : ControllerBase
     {
-
         private readonly AppDbContext _dbContext;
-        private ResponseBrandDto _response;
+        private Models.Dto.ResponseSizeDto _response;
         private IMapper _mapper;
 
-        public BrandController(AppDbContext dbContext, IMapper mapper)
+        public SizeController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseBrandDto();
+            _response = new ResponseSizeDto();
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ResponseBrandDto> Get()
+        public async Task<ResponseSizeDto> Get()
 
         {
             try
             {
-                IEnumerable<Brand> brands = await _dbContext.Brands.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<BrandDto>>(brands);
+                IEnumerable<Size> sizes = await _dbContext.Sizes.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<SizeDto>>(sizes);
             }
             catch (Exception ex)
             {
@@ -44,12 +41,12 @@ namespace Services.BrandAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseBrandDto> Get(int id)
+        public async Task<ResponseSizeDto> Get(int id)
         {
             try
             {
-                Brand brand = await _dbContext.Brands.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                Size size = await _dbContext.Sizes.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -60,15 +57,15 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseBrandDto> Post([FromBody] BrandDto brandDTO)
+        public async Task<ResponseSizeDto> Post([FromBody] SizeDto sizeDTO)
         {
             try
             {
-                Brand brand = _mapper.Map<Brand>(brandDTO);
-                await _dbContext.Brands.AddAsync(brand);
+                Size size = _mapper.Map<Size>(sizeDTO);
+                await _dbContext.Sizes.AddAsync(size);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -79,24 +76,24 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseBrandDto> Put([FromBody] BrandDto brandDTO)
+        public async Task<ResponseSizeDto> Put([FromBody] SizeDto sizeDTO)
         {
             try
             {
 
-                Brand? brand = await _dbContext.Brands.FindAsync(brandDTO.Id);
+                Size? size = await _dbContext.Sizes.FindAsync(sizeDTO.Id);
 
-                if (brand == null)
+                if (size == null)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(brandDTO, brand);
+                _mapper.Map(sizeDTO, size);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<BrandDto>(brand);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -107,12 +104,12 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseBrandDto> Delete(int id)
+        public async Task<ResponseSizeDto> Delete(int id)
         {
             try
             {
-                Brand brand = _dbContext.Brands.First(u => u.Id == id);
-                _dbContext.Brands.Remove(brand);
+                Size size = _dbContext.Sizes.First(u => u.Id == id);
+                _dbContext.Sizes.Remove(size);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

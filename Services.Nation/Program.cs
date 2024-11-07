@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Services.BrandAPI;
-using Services.BrandAPI.Data;
+using Services.NationAPI;
+using Services.NationAPI.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
