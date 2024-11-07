@@ -1,35 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Models;
+using Services.ColorAPI.Models;
 
-namespace Services.CategoryAPI.Data
+namespace Services.ColorAPI.Data
 {
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Color> Colors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Color>().HasData(new Color
             {
                 Id = 1,
-                Name = "Gucci",
-                Description = "This is Gucci",
+                Name = "Trắng",
                 Status = true,
             });
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Color>().HasData(new Color
             {
                 Id = 2,
-                Name = "Fendi",
-                Description = "This is Fendi",
+                Name = "Đen",
                 Status = true,
             });
         }
-
     }
 }

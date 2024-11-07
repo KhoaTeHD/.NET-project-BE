@@ -1,37 +1,35 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Data;
-using Services.CategoryAPI.Models;
-using Services.CategoryAPI.Models.Dto;
+using Services.ColorAPI.Data;
+using Services.ColorAPI.Models;
+using Services.ColorAPI.Models.Dto;
 
-namespace Services.CategoryAPI.Controllers
+namespace Services.ColorAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ColorController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private ResponseDto _response;
+        private ResponseColorDto _response;
         private IMapper _mapper;
 
-        public CategoryController(AppDbContext dbContext, IMapper mapper)
+        public ColorController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseDto();
+            _response = new ResponseColorDto();
             _mapper = mapper;
-
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseColorDto> Get()
 
         {
             try
             {
-                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+                IEnumerable<Color> brands = await _dbContext.Colors.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<ColorDto>>(brands);
             }
             catch (Exception ex)
             {
@@ -43,12 +41,12 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseColorDto> Get(int id)
         {
             try
             {
-                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                Color color = await _dbContext.Colors.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -59,15 +57,15 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseColorDto> Post([FromBody] ColorDto colorDTO)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                await _dbContext.Categories.AddAsync(category);
+                Color color = _mapper.Map<Color>(colorDTO);
+                await _dbContext.Colors.AddAsync(color);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -78,24 +76,24 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseColorDto> Put([FromBody] ColorDto colorDTO)
         {
             try
             {
-                
-                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
 
-                if (category == null)
+                Color? color = await _dbContext.Colors.FindAsync(colorDTO.Id);
+
+                if (color == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Category not found.";
+                    _response.Message = "Color not found.";
                     return _response;
                 }
-                _mapper.Map(categoryDto, category);
+                _mapper.Map(colorDTO, color);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<ColorDto>(color);
             }
             catch (Exception ex)
             {
@@ -106,12 +104,12 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseColorDto> Delete(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
-                _dbContext.Categories.Remove(category);
+                Color color = _dbContext.Colors.First(u => u.Id == id);
+                _dbContext.Colors.Remove(color);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

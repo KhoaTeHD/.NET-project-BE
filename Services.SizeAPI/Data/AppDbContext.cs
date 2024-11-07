@@ -1,35 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Models;
+using Services.SizeAPI.Models;
 
-namespace Services.CategoryAPI.Data
+namespace Services.SizeAPI.Data
 {
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Size> Sizes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Size>().HasData(new Size
             {
                 Id = 1,
-                Name = "Gucci",
-                Description = "This is Gucci",
+                Name = "S",
+                Desc = "Size S, đây là size nhỏ nhất. S nghĩa là Small.",
                 Status = true,
             });
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            modelBuilder.Entity<Size>().HasData(new Size
             {
                 Id = 2,
-                Name = "Fendi",
-                Description = "This is Fendi",
+                Name = "M",
+                Desc = "Size M, đây là size trung bình. M nghĩa là Medium.",
                 Status = true,
             });
         }
-
     }
 }

@@ -1,37 +1,35 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Data;
-using Services.CategoryAPI.Models;
-using Services.CategoryAPI.Models.Dto;
+using Services.ProductAPI.Data;
+using Services.ProductAPI.Models;
+using Services.ProductAPI.Models.Dto;
 
-namespace Services.CategoryAPI.Controllers
+namespace Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private ResponseDto _response;
+        private Models.Dto.ResponseProductDto _response;
         private IMapper _mapper;
 
-        public CategoryController(AppDbContext dbContext, IMapper mapper)
+        public ProductController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseDto();
+            _response = new ResponseProductDto();
             _mapper = mapper;
-
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseProductDto> Get()
 
         {
             try
             {
-                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+                IEnumerable<Product> nations = await _dbContext.Products.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable< ProductDto>>(nations);
             }
             catch (Exception ex)
             {
@@ -43,12 +41,12 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseProductDto> Get(int id)
         {
             try
             {
-                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                Product product = await _dbContext.Products.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -59,15 +57,15 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseProductDto> Post([FromBody] ProductDto productDTO)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                await _dbContext.Categories.AddAsync(category);
+                Product product = _mapper.Map<Product>(productDTO);
+                await _dbContext.Products.AddAsync(product);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -78,24 +76,24 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseProductDto> Put([FromBody] ProductDto productDTO)
         {
             try
             {
-                
-                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
 
-                if (category == null)
+                Product? product = await _dbContext.Products.FindAsync(productDTO.Id);
+
+                if (product == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Category not found.";
+                    _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(categoryDto, category);
+                _mapper.Map(productDTO, product);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -106,12 +104,12 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseProductDto> Delete(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
-                _dbContext.Categories.Remove(category);
+                Product product = _dbContext.Products.First(u => u.Id == id);
+                _dbContext.Products.Remove(product);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

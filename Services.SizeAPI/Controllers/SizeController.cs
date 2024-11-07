@@ -1,37 +1,35 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Data;
-using Services.CategoryAPI.Models;
-using Services.CategoryAPI.Models.Dto;
+using Services.SizeAPI.Data;
+using Services.SizeAPI.Models;
+using Services.SizeAPI.Models.Dto;
 
-namespace Services.CategoryAPI.Controllers
+namespace Services.SizeAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class SizeController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private ResponseDto _response;
+        private Models.Dto.ResponseSizeDto _response;
         private IMapper _mapper;
 
-        public CategoryController(AppDbContext dbContext, IMapper mapper)
+        public SizeController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseDto();
+            _response = new ResponseSizeDto();
             _mapper = mapper;
-
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseSizeDto> Get()
 
         {
             try
             {
-                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+                IEnumerable<Size> sizes = await _dbContext.Sizes.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<SizeDto>>(sizes);
             }
             catch (Exception ex)
             {
@@ -43,12 +41,12 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseSizeDto> Get(int id)
         {
             try
             {
-                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                Size size = await _dbContext.Sizes.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -59,15 +57,15 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseSizeDto> Post([FromBody] SizeDto sizeDTO)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                await _dbContext.Categories.AddAsync(category);
+                Size size = _mapper.Map<Size>(sizeDTO);
+                await _dbContext.Sizes.AddAsync(size);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -78,24 +76,24 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseSizeDto> Put([FromBody] SizeDto sizeDTO)
         {
             try
             {
-                
-                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
 
-                if (category == null)
+                Size? size = await _dbContext.Sizes.FindAsync(sizeDTO.Id);
+
+                if (size == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Category not found.";
+                    _response.Message = "Size not found.";
                     return _response;
                 }
-                _mapper.Map(categoryDto, category);
+                _mapper.Map(sizeDTO, size);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<SizeDto>(size);
             }
             catch (Exception ex)
             {
@@ -106,12 +104,12 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseSizeDto> Delete(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
-                _dbContext.Categories.Remove(category);
+                Size size = _dbContext.Sizes.First(u => u.Id == id);
+                _dbContext.Sizes.Remove(size);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

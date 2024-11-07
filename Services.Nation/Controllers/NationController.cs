@@ -1,37 +1,35 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Data;
-using Services.CategoryAPI.Models;
-using Services.CategoryAPI.Models.Dto;
+using Services.NationAPI.Data;
+using Services.NationAPI.Models;
+using Services.NationAPI.Models.Dto;
 
-namespace Services.CategoryAPI.Controllers
+namespace Services.NationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class NationController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
-        private ResponseDto _response;
+        private Models.Dto.ResponseNationDto _response;
         private IMapper _mapper;
 
-        public CategoryController(AppDbContext dbContext, IMapper mapper)
+        public NationController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseDto();
+            _response = new ResponseNationDto();
             _mapper = mapper;
-
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseNationDto> Get()
 
         {
             try
             {
-                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+                IEnumerable<Nation> nations = await _dbContext.Nations.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<NationDto>>(nations);
             }
             catch (Exception ex)
             {
@@ -43,12 +41,12 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseNationDto> Get(int id)
         {
             try
             {
-                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                Nation nation = await _dbContext.Nations.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -59,15 +57,15 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseNationDto> Post([FromBody] NationDto brandDTO)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                await _dbContext.Categories.AddAsync(category);
+                Nation nation = _mapper.Map<Nation>(brandDTO);
+                await _dbContext.Nations.AddAsync(nation);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -78,24 +76,24 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseNationDto> Put([FromBody] NationDto nationDTO)
         {
             try
             {
-                
-                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
 
-                if (category == null)
+                Nation? nation = await _dbContext.Nations.FindAsync(nationDTO.Id);
+
+                if (nation == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Category not found.";
+                    _response.Message = "Nation not found.";
                     return _response;
                 }
-                _mapper.Map(categoryDto, category);
+                _mapper.Map(nationDTO, nation);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<NationDto>(nation);
             }
             catch (Exception ex)
             {
@@ -106,12 +104,12 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseNationDto> Delete(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
-                _dbContext.Categories.Remove(category);
+                Nation nation = _dbContext.Nations.First(u => u.Id == id);
+                _dbContext.Nations.Remove(nation);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

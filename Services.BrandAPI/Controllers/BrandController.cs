@@ -1,37 +1,38 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Mvc;
+using Services.BrandAPI.Models.Dto;
+using Services.BrandAPI.Data;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using Services.CategoryAPI.Data;
-using Services.CategoryAPI.Models;
-using Services.CategoryAPI.Models.Dto;
+using ResponseBrandDto = Services.BrandAPI.Models.Dto.ResponseBrandDto;
+using Services.BrandAPI.Models;
 
-namespace Services.CategoryAPI.Controllers
+namespace Services.BrandAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class BrandController : ControllerBase
     {
+
         private readonly AppDbContext _dbContext;
-        private ResponseDto _response;
+        private ResponseBrandDto _response;
         private IMapper _mapper;
 
-        public CategoryController(AppDbContext dbContext, IMapper mapper)
+        public BrandController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            _response = new ResponseDto();
+            _response = new ResponseBrandDto();
             _mapper = mapper;
-
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseBrandDto> Get()
 
         {
             try
             {
-                IEnumerable<Category> categories = await _dbContext.Categories.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+                IEnumerable<Brand> brands = await _dbContext.Brands.ToListAsync();
+                _response.Result = _mapper.Map<IEnumerable<BrandDto>>(brands);
             }
             catch (Exception ex)
             {
@@ -43,12 +44,12 @@ namespace Services.CategoryAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseBrandDto> Get(int id)
         {
             try
             {
-                Category category = await _dbContext.Categories.FirstAsync(u => u.Id == id);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                Brand brand = await _dbContext.Brands.FirstAsync(u => u.Id == id);
+                _response.Result = _mapper.Map<BrandDto>(brand);
             }
             catch (Exception ex)
             {
@@ -59,15 +60,15 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseBrandDto> Post([FromBody] BrandDto brandDTO)
         {
             try
             {
-                Category category = _mapper.Map<Category>(categoryDto);
-                await _dbContext.Categories.AddAsync(category);
+                Brand brand = _mapper.Map<Brand>(brandDTO);
+                await _dbContext.Brands.AddAsync(brand);
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<BrandDto>(brand);
             }
             catch (Exception ex)
             {
@@ -78,24 +79,24 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
+        public async Task<ResponseBrandDto> Put([FromBody] BrandDto brandDTO)
         {
             try
             {
-                
-                Category? category = await _dbContext.Categories.FindAsync(categoryDto.Id);
 
-                if (category == null)
+                Brand? brand = await _dbContext.Brands.FindAsync(brandDTO.Id);
+
+                if (brand == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Category not found.";
+                    _response.Message = "Brand not found.";
                     return _response;
                 }
-                _mapper.Map(categoryDto, category);
+                _mapper.Map(brandDTO, brand);
 
                 await _dbContext.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<BrandDto>(brand);
             }
             catch (Exception ex)
             {
@@ -106,12 +107,12 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseBrandDto> Delete(int id)
         {
             try
             {
-                Category category = _dbContext.Categories.First(u => u.Id == id);
-                _dbContext.Categories.Remove(category);
+                Brand brand = _dbContext.Brands.First(u => u.Id == id);
+                _dbContext.Brands.Remove(brand);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
