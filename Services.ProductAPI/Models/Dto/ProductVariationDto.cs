@@ -5,6 +5,7 @@ namespace Services.ProductAPI.Models.Dto
     public class ProductVariationDto
     {
         public int Id { get; set; }
+        public int Pro_Id { get; set; }
         public int Col_Id { get; set; }
         public int Siz_Id { get; set; }
         public decimal Price { get; set; }

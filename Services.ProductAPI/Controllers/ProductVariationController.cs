@@ -86,7 +86,7 @@ namespace Services.ProductAPI.Controllers
                 if (productVariation == null)
                 {
                     _response.IsSuccess = false;
-                    _response.Message = "Brand not found.";
+                    _response.Message = "Product Variation not found.";
                     return _response;
                 }
                 _mapper.Map(productVariationDTO, productVariation);

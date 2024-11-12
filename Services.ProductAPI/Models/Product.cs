@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Services.ProductAPI.Models
 {
@@ -18,5 +19,7 @@ namespace Services.ProductAPI.Models
         public string Name { get; set; }
         [Required]
         public Boolean Status { get; set; }
+        [JsonIgnore]
+        public ICollection<ProductVariation>? ProductVariations { get; set; }
     }
 }

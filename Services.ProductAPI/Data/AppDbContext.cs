@@ -15,6 +15,17 @@ namespace Services.ProductAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Thiết lập khóa chính cho ProductVariation
+            modelBuilder.Entity<ProductVariation>()
+                .HasKey(pv => pv.Id);
+
+            // Thiết lập khóa ngoại cho ProductVariation
+            modelBuilder.Entity<ProductVariation>()
+                .HasOne(pv => pv.Product)
+                .WithMany(p => p.ProductVariations)
+                .HasForeignKey(pv => pv.Pro_Id);
+
+            // Seed dữ liệu cho Product
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 Id = 1,
@@ -37,9 +48,11 @@ namespace Services.ProductAPI.Data
                 Status = true,
             });
 
+            // Seed dữ liệu cho ProductVariation
             modelBuilder.Entity<ProductVariation>().HasData(new ProductVariation
             {
                 Id = 1,
+                Pro_Id = 1,
                 Col_Id = 1,
                 Siz_Id = 1,
                 Price = 50000,
@@ -54,6 +67,7 @@ namespace Services.ProductAPI.Data
             modelBuilder.Entity<ProductVariation>().HasData(new ProductVariation
             {
                 Id = 2,
+                Pro_Id = 2,
                 Col_Id = 1,
                 Siz_Id = 1,
                 Price = 990000,

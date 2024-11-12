@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 namespace Services.ProductAPI.Models
 {
@@ -7,21 +10,28 @@ namespace Services.ProductAPI.Models
         [Key]
         public int Id { get; set; }
         [Required]
+        public int Pro_Id { get; set; }
+        [Required]
         public int Col_Id { get; set; }
         [Required]
         public int Siz_Id { get; set; }
         [Required]
+        [Column(TypeName = "money")]
         public decimal Price { get; set; }
         [Required]
+        [Column(TypeName = "money")]
         public decimal ImportPrice { get; set; }
         [Required]
         public string Pic { get; set; }
         [Required]
         public int Quantity { get; set; }
-        public string Desc { get; set; }
-        [Required]
-        public int Discount { get; set; }
+        public string? Desc { get; set; }
+        public int? Discount { get; set; }
         [Required]
         public Boolean Status { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("Pro_Id")]
+        public Product Product { get; set; }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Services.ProductAPI.Models.Dto
+﻿namespace Services.ProductAPI.Models.Dto
 {
-    public class ProductDto
+    public class UpdateProductDto
     {
         public int Id { get; set; }
         public int Cat_Id { get; set; }
@@ -11,6 +9,5 @@ namespace Services.ProductAPI.Models.Dto
         public int Sup_Id { get; set; }
         public string Name { get; set; }
         public Boolean Status { get; set; }
-        public ICollection<ProductVariation>? ProductVariations { get; set; }
     }
 }
