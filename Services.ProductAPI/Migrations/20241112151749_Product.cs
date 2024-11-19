@@ -36,28 +36,26 @@ namespace Services.ProductAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Pro_Id = table.Column<int>(type: "int", nullable: false),
                     Col_Id = table.Column<int>(type: "int", nullable: false),
                     Siz_Id = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "money", nullable: false),
+                    ImportPrice = table.Column<decimal>(type: "money", nullable: false),
                     Pic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discount = table.Column<int>(type: "int", nullable: false),
+                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discount = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductVariations", x => x.Id);
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProductVariations",
-                columns: new[] { "Id", "Col_Id", "Desc", "Discount", "ImportPrice", "Pic", "Price", "Quantity", "Siz_Id", "Status" },
-                values: new object[,]
-                {
-                    { 1, 1, "Áo thun cao cấp, siêu bền đẹp.", 10, 40000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974763/demowebHKH/aothun/atpe0pdkpyekfcmb981n.jpg", 50000m, 200, 1, true },
-                    { 2, 1, "Áo thun hoá trang DonalTrump cao cấp, siêu bền đẹp.", 8, 800000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974762/demowebHKH/aothun/x3gsg9qmgtmrqxq4cnqn.jpg", 990000m, 100, 1, true }
+                    table.ForeignKey(
+                        name: "FK_ProductVariations_Products_Pro_Id",
+                        column: x => x.Pro_Id,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -68,16 +66,30 @@ namespace Services.ProductAPI.Migrations
                     { 1, 1, 1, "Áo thun co giãn", 1, true, 1 },
                     { 2, 1, 2, "Áo thun Halloween", 1, true, 2 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "ProductVariations",
+                columns: new[] { "Id", "Col_Id", "Desc", "Discount", "ImportPrice", "Pic", "Price", "Pro_Id", "Quantity", "Siz_Id", "Status" },
+                values: new object[,]
+                {
+                    { 1, 1, "Áo thun cao cấp, siêu bền đẹp.", 10, 40000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974763/demowebHKH/aothun/atpe0pdkpyekfcmb981n.jpg", 50000m, 1, 200, 1, true },
+                    { 2, 1, "Áo thun hoá trang DonalTrump cao cấp, siêu bền đẹp.", 8, 800000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974762/demowebHKH/aothun/x3gsg9qmgtmrqxq4cnqn.jpg", 990000m, 2, 100, 1, true }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductVariations_Pro_Id",
+                table: "ProductVariations",
+                column: "Pro_Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "ProductVariations");
 
             migrationBuilder.DropTable(
-                name: "ProductVariations");
+                name: "Products");
         }
     }
 }
