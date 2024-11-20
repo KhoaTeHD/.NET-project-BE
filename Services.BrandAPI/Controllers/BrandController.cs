@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using ResponseBrandDto = Services.BrandAPI.Models.Dto.ResponseBrandDto;
 using Services.BrandAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Services.BrandAPI.Controllers
 {
@@ -60,6 +61,7 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseBrandDto> Post([FromBody] BrandDto brandDTO)
         {
             try
@@ -79,6 +81,7 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseBrandDto> Put([FromBody] BrandDto brandDTO)
         {
             try
@@ -107,6 +110,7 @@ namespace Services.BrandAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseBrandDto> Delete(int id)
         {
             try

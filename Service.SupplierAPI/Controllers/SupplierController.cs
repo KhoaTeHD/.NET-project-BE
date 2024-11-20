@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.SupplierAPI.Data;
@@ -57,6 +58,7 @@ namespace Service.SupplierAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Post([FromBody] SupplierDto supplierDto)
         {
             try
@@ -76,6 +78,7 @@ namespace Service.SupplierAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] SupplierDto supplierDto)
         {
             try
@@ -104,6 +107,7 @@ namespace Service.SupplierAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try
