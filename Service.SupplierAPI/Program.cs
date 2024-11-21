@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +9,17 @@ using Service.SupplierAPI.Extensions;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Thêm dịch vụ CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy => policy.WithOrigins("http://localhost:4200") // Cho phép Angular chạy trên http://localhost:4200
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()); // Cho phép sử dụng Cookie hoặc thông tin xác thực nếu cần
+});
+
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
@@ -67,6 +78,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Sử dụng CORS
+app.UseCors("AllowAngularApp");
 //Auth
 app.UseAuthentication();
 

@@ -18,7 +18,7 @@ namespace Services.AddressAPI.Data
             modelBuilder.Entity<Address>().HasData(new Address
             {
                 Address_ID = 1,
-                Customer_ID = 1,
+                Customer_ID = "CU0001",
                 AddressLine = "123 Main St, District 1",
                 Province = "Hồ Chí Minh",
                 Ward = "Ward 1",
@@ -31,7 +31,7 @@ namespace Services.AddressAPI.Data
             modelBuilder.Entity<Address>().HasData(new Address
             {
                 Address_ID = 2,
-                Customer_ID = 2,
+                Customer_ID = "CU0002",
                 AddressLine = "456 Second Ave, District 3",
                 Province = "Hà Nội",
                 Ward = "Ward 5",

@@ -29,7 +29,7 @@ namespace Services.OrderAPI.Data
                 new Order
                 {
                     Order_ID = 1,
-                    Customer_ID = 101,
+                    Customer_ID = "101",
                     Coupon_Code = null,
                     Address = "123 Main St",
                     Datetime = DateTime.Now.AddDays(-10),
@@ -40,7 +40,7 @@ namespace Services.OrderAPI.Data
                 new Order
                 {
                     Order_ID = 2,
-                    Customer_ID = 102,
+                    Customer_ID = "102",
                     Coupon_Code = 2001,
                     Address = "456 Elm St",
                     Datetime = DateTime.Now.AddDays(-5),
@@ -51,7 +51,7 @@ namespace Services.OrderAPI.Data
                 new Order
                 {
                     Order_ID = 3,
-                    Customer_ID = 103,
+                    Customer_ID = "103",
                     Coupon_Code = null,
                     Address = "789 Oak St",
                     Datetime = DateTime.Now,

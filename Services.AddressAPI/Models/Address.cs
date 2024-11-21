@@ -8,7 +8,7 @@ namespace Services.AddressAPI.Models
         public int Address_ID { get; set; }
 
         [Required]
-        public int Customer_ID { get; set; }
+        public string Customer_ID { get; set; }
 
         [Required]
         public string AddressLine { get; set; }
