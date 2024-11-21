@@ -4,7 +4,7 @@
     {
         public long Order_ID { get; set; }
 
-        public int Customer_ID { get; set; }
+        public string Customer_ID { get; set; }
 
         public int? Coupon_Code { get; set; }
 

@@ -4,7 +4,7 @@
     {
         public int Address_ID { get; set; }
 
-        public int Customer_ID { get; set; }
+        public string Customer_ID { get; set; }
 
         public string AddressLine { get; set; }
 

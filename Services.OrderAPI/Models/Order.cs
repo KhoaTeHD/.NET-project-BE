@@ -9,7 +9,7 @@ namespace Services.OrderAPI.Models
         public long Order_ID { get; set; }
 
         [Required]
-        public int Customer_ID { get; set; }
+        public string Customer_ID { get; set; }
 
         public int? Coupon_Code { get; set; }
 
