@@ -43,7 +43,7 @@ namespace Services.CartItemAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ResponseCartItemDto> Get(int cus_id)
+        public async Task<ResponseCartItemDto> Get(string cus_id)
         {
             try
             {
