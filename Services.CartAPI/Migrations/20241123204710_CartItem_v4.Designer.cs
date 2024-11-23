@@ -11,8 +11,8 @@ using Services.CartItemAPI.Data;
 namespace Services.CartItemAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106192710_TenMigration")]
-    partial class TenMigration
+    [Migration("20241123204710_CartItem_v4")]
+    partial class CartItem_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,11 +32,12 @@ namespace Services.CartItemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Item_Id"));
 
-                    b.Property<int>("Cus_Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Cus_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -44,22 +45,6 @@ namespace Services.CartItemAPI.Migrations
                     b.HasKey("Item_Id");
 
                     b.ToTable("CartItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Item_Id = 1,
-                            Cus_Id = 1,
-                            Price = 20000m,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Item_Id = 2,
-                            Cus_Id = 1,
-                            Price = 90000m,
-                            Quantity = 20
-                        });
                 });
 #pragma warning restore 612, 618
         }

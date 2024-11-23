@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.SizeAPI.Data;
@@ -57,6 +58,7 @@ namespace Services.SizeAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseSizeDto> Post([FromBody] SizeDto sizeDTO)
         {
             try
@@ -76,6 +78,7 @@ namespace Services.SizeAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseSizeDto> Put([FromBody] SizeDto sizeDTO)
         {
             try
@@ -104,6 +107,7 @@ namespace Services.SizeAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseSizeDto> Delete(int id)
         {
             try

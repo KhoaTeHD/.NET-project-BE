@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.ColorAPI.Data;
@@ -57,6 +58,7 @@ namespace Services.ColorAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseColorDto> Post([FromBody] ColorDto colorDTO)
         {
             try
@@ -76,6 +78,7 @@ namespace Services.ColorAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseColorDto> Put([FromBody] ColorDto colorDTO)
         {
             try
@@ -104,6 +107,7 @@ namespace Services.ColorAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseColorDto> Delete(int id)
         {
             try

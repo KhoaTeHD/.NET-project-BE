@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.ProductAPI.Data;
@@ -57,6 +58,7 @@ namespace Services.ProductAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseProductVariationDto> Post([FromBody] ProductVariationDto productVariationDTO)
         {
             try
@@ -76,6 +78,7 @@ namespace Services.ProductAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseProductVariationDto> Put([FromBody] ProductVariationDto productVariationDTO)
         {
             try
@@ -104,6 +107,7 @@ namespace Services.ProductAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseProductVariationDto> Delete(int id)
         {
             try
