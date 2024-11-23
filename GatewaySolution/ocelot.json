@@ -349,37 +349,6 @@
     },
     // Nation -----------------------------------------
     {
-      "DownstreamPathTemplate": "/api/GoodsReceipt/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7008
-        }
-      ],
-      "UpstreamPathTemplate": "/api/GoodsReceipt/{id}",
-      "UpstreamHttpMethod": [ "Get", "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/GoodsReceipt",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7008
-        }
-      ],
-      "UpstreamPathTemplate": "/api/GoodsReceipt",
-      "UpstreamHttpMethod": [ "POST", "PUT", "Get" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    // Nation -----------------------------------------
-    {
       "DownstreamPathTemplate": "/api/Nation/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
