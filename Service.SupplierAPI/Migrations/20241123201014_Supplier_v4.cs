@@ -2,12 +2,10 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Service.SupplierAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class M_Supplier_Db : Migration
+    public partial class Supplier_v4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,15 +24,6 @@ namespace Service.SupplierAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Suppliers", x => x.Supplier_ID);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Suppliers",
-                columns: new[] { "Supplier_ID", "Address", "PhoneNumber", "Status", "SupplierName" },
-                values: new object[,]
-                {
-                    { 1, "123 Main St, New York, NY", "9876543210", true, "ABC Supplies" },
-                    { 2, "456 Elm St, Los Angeles, CA", "0123456789", false, "Global Traders" }
                 });
         }
 

@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.SizeAPI.Data;
+using Services.NationAPI.Data;
 
 #nullable disable
 
-namespace Services.SizeAPI.Migrations
+namespace Services.NationAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106181729_TenMigration")]
-    partial class TenMigration
+    [Migration("20241123195813_Nation_v4")]
+    partial class Nation_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,17 +24,13 @@ namespace Services.SizeAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Services.SizeAPI.Models.Size", b =>
+            modelBuilder.Entity("Services.NationAPI.Models.Nation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Desc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,23 +41,7 @@ namespace Services.SizeAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Desc = "Size S, đây là size nhỏ nhất. S nghĩa là Small.",
-                            Name = "S",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Desc = "Size M, đây là size trung bình. M nghĩa là Medium.",
-                            Name = "M",
-                            Status = true
-                        });
+                    b.ToTable("Nations");
                 });
 #pragma warning restore 612, 618
         }

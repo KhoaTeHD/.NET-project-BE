@@ -16,19 +16,19 @@ namespace Services.BrandAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Brand>().HasData(new Brand
-            {
-                Id = 1,
-                Name = "Hades",
-                Status = true,
-            });
+            //modelBuilder.Entity<Brand>().HasData(new Brand
+            //{
+            //    Id = 1,
+            //    Name = "Hades",
+            //    Status = true,
+            //});
 
-            modelBuilder.Entity<Brand>().HasData(new Brand
-            {
-                Id = 2,
-                Name = "Dirty Coins",
-                Status = true,
-            });
+            //modelBuilder.Entity<Brand>().HasData(new Brand
+            //{
+            //    Id = 2,
+            //    Name = "Dirty Coins",
+            //    Status = true,
+            //});
         }
     }
 }

@@ -13,19 +13,19 @@ namespace Services.NationAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Nation>().HasData(new Nation
-            {
-                Id = 1,
-                Name = "Việt Nam",
-                Status = true,
-            });
+            //modelBuilder.Entity<Nation>().HasData(new Nation
+            //{
+            //    Id = 1,
+            //    Name = "Việt Nam",
+            //    Status = true,
+            //});
 
-            modelBuilder.Entity<Nation>().HasData(new Nation
-            {
-                Id = 2,
-                Name = "Trung Quốc",
-                Status = true,
-            });
+            //modelBuilder.Entity<Nation>().HasData(new Nation
+            //{
+            //    Id = 2,
+            //    Name = "Trung Quốc",
+            //    Status = true,
+            //});
         }
     }
 }

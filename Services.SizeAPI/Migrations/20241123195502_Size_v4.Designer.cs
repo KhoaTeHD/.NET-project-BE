@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.NationAPI.Data;
+using Services.SizeAPI.Data;
 
 #nullable disable
 
-namespace Services.NationAPI.Migrations
+namespace Services.SizeAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106172708_TenMigration")]
-    partial class TenMigration
+    [Migration("20241123195502_Size_v4")]
+    partial class Size_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,13 +24,17 @@ namespace Services.NationAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Services.NationAPI.Models.Nation", b =>
+            modelBuilder.Entity("Services.SizeAPI.Models.Size", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -41,21 +45,7 @@ namespace Services.NationAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Nations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Việt Nam",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Trung Quốc",
-                            Status = true
-                        });
+                    b.ToTable("Sizes");
                 });
 #pragma warning restore 612, 618
         }

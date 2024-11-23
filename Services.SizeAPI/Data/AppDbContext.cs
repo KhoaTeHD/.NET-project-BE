@@ -14,21 +14,21 @@ namespace Services.SizeAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Size>().HasData(new Size
-            {
-                Id = 1,
-                Name = "S",
-                Desc = "Size S, đây là size nhỏ nhất. S nghĩa là Small.",
-                Status = true,
-            });
+            //modelBuilder.Entity<Size>().HasData(new Size
+            //{
+            //    Id = 1,
+            //    Name = "S",
+            //    Desc = "Size S, đây là size nhỏ nhất. S nghĩa là Small.",
+            //    Status = true,
+            //});
 
-            modelBuilder.Entity<Size>().HasData(new Size
-            {
-                Id = 2,
-                Name = "M",
-                Desc = "Size M, đây là size trung bình. M nghĩa là Medium.",
-                Status = true,
-            });
+            //modelBuilder.Entity<Size>().HasData(new Size
+            //{
+            //    Id = 2,
+            //    Name = "M",
+            //    Desc = "Size M, đây là size trung bình. M nghĩa là Medium.",
+            //    Status = true,
+            //});
         }
     }
 }

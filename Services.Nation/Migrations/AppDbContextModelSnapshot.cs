@@ -39,20 +39,6 @@ namespace Services.NationAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Nations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Việt Nam",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Trung Quốc",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }

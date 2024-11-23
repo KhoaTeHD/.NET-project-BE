@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.BrandAPI.Data;
+using Services.ColorAPI.Data;
 
 #nullable disable
 
-namespace Services.BrandAPI.Migrations
+namespace Services.ColorAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106160438_TenMigration")]
-    partial class TenMigration
+    [Migration("20241123195217_Color_v4")]
+    partial class Color_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Services.BrandAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Services.BrandAPI.Models.Brand", b =>
+            modelBuilder.Entity("Services.ColorAPI.Models.Color", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,21 +41,7 @@ namespace Services.BrandAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Hades",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Dirty Coins",
-                            Status = true
-                        });
+                    b.ToTable("Colors");
                 });
 #pragma warning restore 612, 618
         }

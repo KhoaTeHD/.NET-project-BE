@@ -43,22 +43,6 @@ namespace Services.SizeAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Desc = "Size S, đây là size nhỏ nhất. S nghĩa là Small.",
-                            Name = "S",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Desc = "Size M, đây là size trung bình. M nghĩa là Medium.",
-                            Name = "M",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }

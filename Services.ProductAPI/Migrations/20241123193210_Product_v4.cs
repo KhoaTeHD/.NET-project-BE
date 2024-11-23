@@ -2,12 +2,10 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Services.ProductAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Product : Migration
+    public partial class Product_v4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,24 +54,6 @@ namespace Services.ProductAPI.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "Id", "Bra_Id", "Cat_Id", "Name", "Nat_Id", "Status", "Sup_Id" },
-                values: new object[,]
-                {
-                    { 1, 1, 1, "Áo thun co giãn", 1, true, 1 },
-                    { 2, 1, 2, "Áo thun Halloween", 1, true, 2 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProductVariations",
-                columns: new[] { "Id", "Col_Id", "Desc", "Discount", "ImportPrice", "Pic", "Price", "Pro_Id", "Quantity", "Siz_Id", "Status" },
-                values: new object[,]
-                {
-                    { 1, 1, "Áo thun cao cấp, siêu bền đẹp.", 10, 40000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974763/demowebHKH/aothun/atpe0pdkpyekfcmb981n.jpg", 50000m, 1, 200, 1, true },
-                    { 2, 1, "Áo thun hoá trang DonalTrump cao cấp, siêu bền đẹp.", 8, 800000m, "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974762/demowebHKH/aothun/x3gsg9qmgtmrqxq4cnqn.jpg", 990000m, 2, 100, 1, true }
                 });
 
             migrationBuilder.CreateIndex(

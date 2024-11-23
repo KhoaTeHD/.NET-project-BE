@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.CategoryAPI.Data;
+using Services.BrandAPI.Data;
 
 #nullable disable
 
-namespace Services.CategoryAPI.Migrations
+namespace Services.BrandAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241028034319_AddCategoryToDb")]
-    partial class AddCategoryToDb
+    [Migration("20241123200711_Brand_v4")]
+    partial class Brand_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,17 +24,13 @@ namespace Services.CategoryAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Services.CategoryAPI.Models.Category", b =>
+            modelBuilder.Entity("Services.BrandAPI.Models.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,7 +41,7 @@ namespace Services.CategoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Brands");
                 });
 #pragma warning restore 612, 618
         }

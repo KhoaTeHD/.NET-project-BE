@@ -2,37 +2,27 @@
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace Services.NationAPI.Migrations
+namespace Services.SizeAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class TenMigration : Migration
+    public partial class Size_v4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Nations",
+                name: "Sizes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Desc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nations", x => x.Id);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Nations",
-                columns: new[] { "Id", "Name", "Status" },
-                values: new object[,]
-                {
-                    { 1, "Việt Nam", true },
-                    { 2, "Trung Quốc", true }
+                    table.PrimaryKey("PK_Sizes", x => x.Id);
                 });
         }
 
@@ -40,7 +30,7 @@ namespace Services.NationAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Nations");
+                name: "Sizes");
         }
     }
 }

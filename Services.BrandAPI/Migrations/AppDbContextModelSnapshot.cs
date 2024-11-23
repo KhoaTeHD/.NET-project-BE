@@ -39,20 +39,6 @@ namespace Services.BrandAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Hades",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Dirty Coins",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }
