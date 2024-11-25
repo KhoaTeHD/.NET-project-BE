@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.GoodsReceiptAPI.Data;
@@ -23,6 +24,7 @@ namespace Services.GoodsReceiptAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
         {
             try
@@ -41,6 +43,7 @@ namespace Services.GoodsReceiptAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get(int id)
         {
             try
@@ -67,6 +70,7 @@ namespace Services.GoodsReceiptAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Post([FromBody] GoodsReceiptDto goodsReceiptDto)
         {
             try
@@ -93,6 +97,7 @@ namespace Services.GoodsReceiptAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] GoodsReceiptDto goodsReceiptDto)
         {
             try
@@ -152,6 +157,7 @@ namespace Services.GoodsReceiptAPI.Controllers
 
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try

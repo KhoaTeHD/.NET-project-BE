@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.OrderAPI.Data;
@@ -23,6 +24,7 @@ namespace Services.OrderAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
         {
             try
@@ -39,6 +41,7 @@ namespace Services.OrderAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<ResponseDto> Get(int id)
         {
             try
@@ -65,6 +68,7 @@ namespace Services.OrderAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "CUSTOMER")]
         public async Task<ResponseDto> Post([FromBody] OrderDto orderDto)
         {
             try
@@ -91,6 +95,7 @@ namespace Services.OrderAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] OrderDto orderDto)
         {
             try
@@ -150,6 +155,7 @@ namespace Services.OrderAPI.Controllers
 
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try
@@ -175,5 +181,30 @@ namespace Services.OrderAPI.Controllers
             }
             return _response;
         }
+
+        [HttpGet("customer/{customerId}")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
+        public async Task<ResponseDto> GetOrdersByCustomerId(string customerId)
+        {
+            try
+            {
+                // Lấy danh sách Order theo Customer_ID
+                IEnumerable<Order> orders = await _dbContext.Orders
+                    .Include(o => o.DetailOrders) // Bao gồm các chi tiết của Order
+                    .Where(o => o.Customer_ID == customerId) // Lọc theo Customer_ID
+                    .ToListAsync();
+
+                // Map danh sách Order sang DTO
+                _response.Result = _mapper.Map<IEnumerable<OrderDto>>(orders);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
     }
 }

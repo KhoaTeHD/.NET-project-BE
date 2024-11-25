@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.AddressAPI.Data;
@@ -24,6 +25,7 @@ namespace Services.AddressAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
         {
             try
@@ -41,6 +43,7 @@ namespace Services.AddressAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<ResponseDto> Get(int id)
         {
             try
@@ -57,6 +60,7 @@ namespace Services.AddressAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<ResponseDto> Post([FromBody] AddressDto addressDto)
         {
             try
@@ -76,6 +80,7 @@ namespace Services.AddressAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<ResponseDto> Put([FromBody] AddressDto addressDto)
         {
             try
@@ -104,6 +109,7 @@ namespace Services.AddressAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<ResponseDto> Delete(int id)
         {
             try
@@ -117,6 +123,30 @@ namespace Services.AddressAPI.Controllers
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
+            return _response;
+        }
+
+        [HttpGet]
+        [Route("customer/{customerId}")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
+        public async Task<ResponseDto> GetByCustomerId(string customerId)
+        {
+            try
+            {
+                // Lấy danh sách địa chỉ theo Customer_ID
+                IEnumerable<Address> addresses = await _dbContext.Addresses
+                    .Where(a => a.Customer_ID == customerId)
+                    .ToListAsync();
+
+                // Map danh sách địa chỉ sang DTO
+                _response.Result = _mapper.Map<IEnumerable<AddressDto>>(addresses);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
             return _response;
         }
 

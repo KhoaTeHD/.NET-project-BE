@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.CouponAPI.Data;
@@ -24,6 +25,7 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
         {
             try
@@ -41,6 +43,7 @@ namespace Services.CouponAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get(int id)
         {
             try
@@ -57,6 +60,7 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Post([FromBody] CouponDto couponDto)
         {
             try
@@ -76,6 +80,7 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] CouponDto couponDto)
         {
             try
@@ -104,6 +109,7 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try
