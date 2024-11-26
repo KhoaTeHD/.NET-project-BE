@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Services.OrderAPI.Models.Dto;
 
 namespace Services.OrderAPI.Models
 {
@@ -21,5 +22,8 @@ namespace Services.OrderAPI.Models
         // Navigation property
         [ForeignKey("Order_ID")]
         public Order Order { get; set; }
+
+        [NotMapped]
+        public ProductVariationDto Product { get; set; }
     }
 }
