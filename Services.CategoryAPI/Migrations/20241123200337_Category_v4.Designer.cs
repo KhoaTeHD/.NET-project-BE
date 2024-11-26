@@ -11,8 +11,8 @@ using Services.CategoryAPI.Data;
 namespace Services.CategoryAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241028035625_SeedCategoryTables")]
-    partial class SeedCategoryTables
+    [Migration("20241123200337_Category_v4")]
+    partial class Category_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,22 +46,6 @@ namespace Services.CategoryAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "This is Gucci",
-                            Name = "Gucci",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "This is Fendi",
-                            Name = "Fendi",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -43,22 +43,6 @@ namespace Services.CategoryAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "This is Gucci",
-                            Name = "Gucci",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "This is Fendi",
-                            Name = "Fendi",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -14,19 +14,19 @@ namespace Services.ColorAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Color>().HasData(new Color
-            {
-                Id = 1,
-                Name = "Trắng",
-                Status = true,
-            });
+            //modelBuilder.Entity<Color>().HasData(new Color
+            //{
+            //    Id = 1,
+            //    Name = "Trắng",
+            //    Status = true,
+            //});
 
-            modelBuilder.Entity<Color>().HasData(new Color
-            {
-                Id = 2,
-                Name = "Đen",
-                Status = true,
-            });
+            //modelBuilder.Entity<Color>().HasData(new Color
+            //{
+            //    Id = 2,
+            //    Name = "Đen",
+            //    Status = true,
+            //});
         }
     }
 }

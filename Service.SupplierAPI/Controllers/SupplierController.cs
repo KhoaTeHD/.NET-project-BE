@@ -25,6 +25,7 @@ namespace Service.SupplierAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
         {
             try
@@ -42,6 +43,7 @@ namespace Service.SupplierAPI.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get(int id)
         {
             try

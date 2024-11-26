@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Services.ColorAPI.Data;
+using Service.SupplierAPI.Data;
 
 #nullable disable
 
-namespace Services.ColorAPI.Migrations
+namespace Service.SupplierAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106175259_TenMigration")]
-    partial class TenMigration
+    [Migration("20241123201014_Supplier_v4")]
+    partial class Supplier_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,38 +24,35 @@ namespace Services.ColorAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Services.ColorAPI.Models.Color", b =>
+            modelBuilder.Entity("Services.SupplierAPI.Models.Supplier", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Supplier_ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Supplier_ID"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("Colors");
+                    b.HasKey("Supplier_ID");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Trắng",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Đen",
-                            Status = true
-                        });
+                    b.ToTable("Suppliers");
                 });
 #pragma warning restore 612, 618
         }

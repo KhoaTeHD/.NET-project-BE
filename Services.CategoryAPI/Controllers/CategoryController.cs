@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.CategoryAPI.Data;
@@ -59,6 +60,7 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Post([FromBody] CategoryDto categoryDto)
         {
             try
@@ -78,6 +80,7 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] CategoryDto categoryDto)
         {
             try
@@ -106,6 +109,7 @@ namespace Services.CategoryAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try

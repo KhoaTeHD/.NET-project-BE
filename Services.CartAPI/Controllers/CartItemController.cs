@@ -41,16 +41,35 @@ namespace Services.CartItemAPI.Controllers
             return _response;
         }
 
+        //[HttpGet]
+        //[Route("{id:int}")]
+        //public async Task<ResponseCartItemDto> Get(string cus_id)
+        //{
+        //    try
+        //    {
+        //        List<CartItem> cartItems = await _dbContext.CartItems
+        //            .Where(u => u.Cus_Id == cus_id)  
+        //            .ToListAsync();  
+        //        _response.Result = _mapper.Map<List<CartItemDto>>(cartItems);  
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = ex.Message;
+        //    }
+        //    return _response;
+        //}
+
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<ResponseCartItemDto> Get(int cus_id)
+        [Route("{cus_id}")]
+        public async Task<ResponseCartItemDto> GetByCustomerId(string cus_id)
         {
             try
             {
                 List<CartItem> cartItems = await _dbContext.CartItems
-                    .Where(u => u.Cus_Id == cus_id)  
-                    .ToListAsync();  
-                _response.Result = _mapper.Map<List<CartItemDto>>(cartItems);  
+                    .Where(u => u.Cus_Id == cus_id)
+                    .ToListAsync();
+                _response.Result = _mapper.Map<List<CartItemDto>>(cartItems);
             }
             catch (Exception ex)
             {
@@ -59,6 +78,7 @@ namespace Services.CartItemAPI.Controllers
             }
             return _response;
         }
+
 
         [HttpPost]
         public async Task<ResponseCartItemDto> Post([FromBody] CartItemDto cartItemDTO)

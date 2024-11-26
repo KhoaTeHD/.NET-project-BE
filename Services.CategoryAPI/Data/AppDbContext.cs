@@ -14,21 +14,21 @@ namespace Services.CategoryAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                Id = 1,
-                Name = "Gucci",
-                Description = "This is Gucci",
-                Status = true,
-            });
+            //modelBuilder.Entity<Category>().HasData(new Category
+            //{
+            //    Id = 1,
+            //    Name = "Gucci",
+            //    Description = "This is Gucci",
+            //    Status = true,
+            //});
 
-            modelBuilder.Entity<Category>().HasData(new Category
-            {
-                Id = 2,
-                Name = "Fendi",
-                Description = "This is Fendi",
-                Status = true,
-            });
+            //modelBuilder.Entity<Category>().HasData(new Category
+            //{
+            //    Id = 2,
+            //    Name = "Fendi",
+            //    Description = "This is Fendi",
+            //    Status = true,
+            //});
         }
 
     }

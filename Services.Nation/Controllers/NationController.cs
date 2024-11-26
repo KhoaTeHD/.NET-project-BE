@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.NationAPI.Data;
@@ -57,6 +58,7 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseNationDto> Post([FromBody] NationDto brandDTO)
         {
             try
@@ -76,6 +78,7 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseNationDto> Put([FromBody] NationDto nationDTO)
         {
             try
@@ -104,6 +107,7 @@ namespace Services.NationAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseNationDto> Delete(int id)
         {
             try

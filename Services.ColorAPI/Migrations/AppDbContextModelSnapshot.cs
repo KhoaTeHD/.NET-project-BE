@@ -39,20 +39,6 @@ namespace Services.ColorAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Trắng",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Đen",
-                            Status = true
-                        });
                 });
 #pragma warning restore 612, 618
         }

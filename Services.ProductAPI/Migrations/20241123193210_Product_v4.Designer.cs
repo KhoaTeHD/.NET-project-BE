@@ -12,8 +12,8 @@ using Services.ProductAPI.Data;
 namespace Services.ProductAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241112152207_Product_v2")]
-    partial class Product_v2
+    [Migration("20241123193210_Product_v4")]
+    partial class Product_v4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,28 +55,6 @@ namespace Services.ProductAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Bra_Id = 1,
-                            Cat_Id = 1,
-                            Name = "Áo thun co giãn",
-                            Nat_Id = 1,
-                            Status = true,
-                            Sup_Id = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Bra_Id = 1,
-                            Cat_Id = 2,
-                            Name = "Áo thun Halloween",
-                            Nat_Id = 1,
-                            Status = true,
-                            Sup_Id = 2
-                        });
                 });
 
             modelBuilder.Entity("Services.ProductAPI.Models.ProductVariation", b =>
@@ -123,36 +101,6 @@ namespace Services.ProductAPI.Migrations
                     b.HasIndex("Pro_Id");
 
                     b.ToTable("ProductVariations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Col_Id = 1,
-                            Desc = "Áo thun cao cấp, siêu bền đẹp.",
-                            Discount = 10,
-                            ImportPrice = 40000m,
-                            Pic = "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974763/demowebHKH/aothun/atpe0pdkpyekfcmb981n.jpg",
-                            Price = 50000m,
-                            Pro_Id = 1,
-                            Quantity = 200,
-                            Siz_Id = 1,
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Col_Id = 1,
-                            Desc = "Áo thun hoá trang DonalTrump cao cấp, siêu bền đẹp.",
-                            Discount = 8,
-                            ImportPrice = 800000m,
-                            Pic = "https://res.cloudinary.com/dt46dvdeu/image/upload/v1730974762/demowebHKH/aothun/x3gsg9qmgtmrqxq4cnqn.jpg",
-                            Price = 990000m,
-                            Pro_Id = 2,
-                            Quantity = 100,
-                            Siz_Id = 1,
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("Services.ProductAPI.Models.ProductVariation", b =>

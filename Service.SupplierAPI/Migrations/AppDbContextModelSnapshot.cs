@@ -50,24 +50,6 @@ namespace Service.SupplierAPI.Migrations
                     b.HasKey("Supplier_ID");
 
                     b.ToTable("Suppliers");
-
-                    b.HasData(
-                        new
-                        {
-                            Supplier_ID = 1,
-                            Address = "123 Main St, New York, NY",
-                            PhoneNumber = "9876543210",
-                            Status = true,
-                            SupplierName = "ABC Supplies"
-                        },
-                        new
-                        {
-                            Supplier_ID = 2,
-                            Address = "456 Elm St, Los Angeles, CA",
-                            PhoneNumber = "0123456789",
-                            Status = false,
-                            SupplierName = "Global Traders"
-                        });
                 });
 #pragma warning restore 612, 618
         }
