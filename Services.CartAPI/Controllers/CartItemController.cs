@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Services.CartItemAPI.Data;
 using Services.CartItemAPI.Models;
 using Services.CartItemAPI.Models.Dto;
+using Services.CartItemAPI.Service.IService;
 using ResponseCartItemDto = Services.CartItemAPI.Models.Dto.ResponseCartItemDto;
 
 namespace Services.CartItemAPI.Controllers
@@ -16,12 +17,13 @@ namespace Services.CartItemAPI.Controllers
         private readonly AppDbContext _dbContext;
         private ResponseCartItemDto _response;
         private IMapper _mapper;
-
-        public CartItemController(AppDbContext dbContext, IMapper mapper)
+        private IProductService _productService;
+        public CartItemController(AppDbContext dbContext, IMapper mapper, IProductService productService)
         {
             _dbContext = dbContext;
             _response = new ResponseCartItemDto();
             _mapper = mapper;
+            _productService = productService;
         }
 
 
@@ -69,7 +71,24 @@ namespace Services.CartItemAPI.Controllers
                 List<CartItem> cartItems = await _dbContext.CartItems
                     .Where(u => u.Cus_Id == cus_id)
                     .ToListAsync();
-                _response.Result = _mapper.Map<List<CartItemDto>>(cartItems);
+                IEnumerable<CartItemDto> cartDtos = _mapper.Map<IEnumerable<CartItemDto>>(cartItems);
+
+                IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
+                if (productDtos == null || !productDtos.Any())
+                {
+                    throw new Exception("No products found.");
+                }
+
+                foreach (var cartDto in cartDtos)
+                {
+                    cartDto.Product = productDtos.FirstOrDefault(u => u.Id == cartDto.Item_Id);
+                    if (cartDto.Product == null)
+                    {
+                        throw new Exception($"Product not found for Cart {cartDto.Item_Id} ");
+                    }
+                }
+
+                _response.Result = cartDtos;
             }
             catch (Exception ex)
             {

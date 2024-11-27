@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Services.ProductAPI.Data;
 using Services.ProductAPI.Models;
 using Services.ProductAPI.Models.Dto;
+using Services.ProductAPI.Service;
+using Services.ProductAPI.Service.IService;
 
 namespace Services.ProductAPI.Controllers
 {
@@ -15,12 +17,16 @@ namespace Services.ProductAPI.Controllers
         private readonly AppDbContext _dbContext;
         private Models.Dto.ResponseProductVariationDto _response;
         private IMapper _mapper;
+        private IColorService _colorService;
+        private ISizeService _sizeService;
 
-        public ProductVariationController(AppDbContext dbContext, IMapper mapper)
+        public ProductVariationController(AppDbContext dbContext, IMapper mapper, ISizeService sizeService, IColorService colorService)
         {
             _dbContext = dbContext;
             _response = new ResponseProductVariationDto();
             _mapper = mapper;
+            _sizeService = sizeService;
+            _colorService = colorService;
         }
 
         [HttpGet]
@@ -30,7 +36,35 @@ namespace Services.ProductAPI.Controllers
             try
             {
                 IEnumerable<ProductVariation> productVariations = await _dbContext.ProductVariations.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<ProductVariationDto>>(productVariations);
+                IEnumerable<ProductVariationDto> productVariationDtos = _mapper.Map<IEnumerable<ProductVariationDto>>(productVariations);
+
+                IEnumerable<ColorDto> colorDtos = await _colorService.GetColors();
+                IEnumerable<SizeDto> sizeDtos = await _sizeService.GetSizes();
+
+                if (colorDtos == null || !colorDtos.Any())
+                {
+                    throw new Exception("No color found.");
+                }
+                if (sizeDtos == null || !sizeDtos.Any())
+                {
+                    throw new Exception("No sizes found.");
+                }
+
+                foreach (var productVariationDto in productVariationDtos)
+                {
+                    productVariationDto.Color = colorDtos.FirstOrDefault(u => u.Id == productVariationDto.Col_Id);
+                    if (productVariationDto.Color == null)
+                    {
+                        throw new Exception($"Color not found for ProductVariation {productVariationDto.Id} with Col_Id {productVariationDto.Col_Id}.");
+                    }
+
+                    productVariationDto.Size = sizeDtos.FirstOrDefault(u => u.Id == productVariationDto.Siz_Id);
+                    if (productVariationDto.Size == null)
+                    {
+                        throw new Exception($"Size not found for ProductVariation {productVariationDto.Id} with Siz_Id {productVariationDto.Siz_Id}.");
+                    }
+                }
+                _response.Result = productVariationDtos;
             }
             catch (Exception ex)
             {

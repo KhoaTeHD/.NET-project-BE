@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Services.ProductAPI.Models.Dto
+﻿namespace Services.CartItemAPI.Models.Dto
 {
     public class ProductVariationDto
     {
@@ -16,7 +13,5 @@ namespace Services.ProductAPI.Models.Dto
         public string Desc { get; set; }
         public int Discount { get; set; }
         public Boolean Status { get; set; }
-        public ColorDto? Color { get; set; }
-        public SizeDto? Size { get; set; }
     }
 }

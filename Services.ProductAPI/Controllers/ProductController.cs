@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Services.ProductAPI.Data;
 using Services.ProductAPI.Models;
 using Services.ProductAPI.Models.Dto;
+using Services.ProductAPI.Service;
+using Services.ProductAPI.Service.IService;
 
 namespace Services.ProductAPI.Controllers
 {
@@ -15,13 +17,58 @@ namespace Services.ProductAPI.Controllers
         private readonly AppDbContext _dbContext;
         private Models.Dto.ResponseProductDto _response;
         private IMapper _mapper;
+        private IBrandService _brandService;
+        private ICategoryService _categoryService;
+        private INationService _nationService;
+        private ISupplierService _supplierService;
+        private IColorService _colorService;
+        private ISizeService _sizeService;
 
-        public ProductController(AppDbContext dbContext, IMapper mapper)
+        public ProductController(AppDbContext dbContext, IMapper mapper, IBrandService brandService, ICategoryService categoryService, INationService nationService, ISupplierService supplierService, IColorService colorService, ISizeService sizeService)
         {
             _dbContext = dbContext;
             _response = new ResponseProductDto();
             _mapper = mapper;
+            _brandService = brandService;
+            _categoryService = categoryService;
+            _nationService = nationService;
+            _supplierService = supplierService;
+            _colorService = colorService;
+            _sizeService = sizeService;
         }
+
+        //[HttpGet]
+        //public async Task<ResponseProductDto> Get()
+        //{
+        //    try
+        //    {
+        //        IEnumerable<Product> products = await _dbContext.Products.Include(gr => gr.ProductVariations).ToListAsync();
+        //        IEnumerable<ProductDto> productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+        //        IEnumerable<BrandDto> brandDtos = await _brandService.GetBrands();
+        //        if (brandDtos == null || !brandDtos.Any())
+        //        {
+        //            throw new Exception("No brands found.");
+        //        }
+
+        //        foreach (var productDto in productDtos)
+        //        {
+        //            productDto.Brand = brandDtos.FirstOrDefault(u => u.Id == productDto.Bra_Id);
+        //            if (productDto.Brand == null)
+        //            {
+        //                throw new Exception($"Brand not found for Product {productDto.Id} with Bra_Id {productDto.Bra_Id}.");
+        //            }
+        //        }
+
+        //        _response.Result = productDtos;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = ex.Message;
+        //    }
+        //    return _response;
+        //}
 
         [HttpGet]
         public async Task<ResponseProductDto> Get()
@@ -29,7 +76,83 @@ namespace Services.ProductAPI.Controllers
             try
             {
                 IEnumerable<Product> products = await _dbContext.Products.Include(gr => gr.ProductVariations).ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<ProductDto>>(products);
+                IEnumerable<ProductDto> productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+
+                IEnumerable<BrandDto> brandDtos = await _brandService.GetBrands();
+                IEnumerable<CategoryDto> categoryDtos = await _categoryService.GetCategorys();
+                IEnumerable<NationDto> nationDtos = await _nationService.GetNations();
+                IEnumerable<SupplierDto> supplierDtos = await _supplierService.GetSuppliers();
+                IEnumerable<ColorDto> colorDtos = await _colorService.GetColors();
+                IEnumerable<SizeDto> sizeDtos = await _sizeService.GetSizes();
+
+                if (brandDtos == null || !brandDtos.Any())
+                {
+                    throw new Exception("No brands found.");
+                }
+                if (categoryDtos == null || !categoryDtos.Any())
+                {
+                    throw new Exception("No categories found.");
+                }
+                if (nationDtos == null || !nationDtos.Any())
+                {
+                    throw new Exception("No nations found.");
+                }
+                if (supplierDtos == null || !supplierDtos.Any())
+                {
+                    throw new Exception("No suppliers found.");
+                }
+                if (colorDtos == null || !colorDtos.Any())
+                {
+                    throw new Exception("No color found.");
+                }
+                if (sizeDtos == null || !sizeDtos.Any())
+                {
+                    throw new Exception("No sizes found.");
+                }
+
+                foreach (var productDto in productDtos)
+                {
+                    productDto.Brand = brandDtos.FirstOrDefault(u => u.Id == productDto.Bra_Id);
+                    if (productDto.Brand == null)
+                    {
+                        throw new Exception($"Brand not found for Product {productDto.Id} with Bra_Id {productDto.Bra_Id}.");
+                    }
+
+                    productDto.Category = categoryDtos.FirstOrDefault(u => u.Id == productDto.Cat_Id);
+                    if (productDto.Category == null)
+                    {
+                        throw new Exception($"Category not found for Product {productDto.Id} with Cat_Id {productDto.Cat_Id}.");
+                    }
+
+                    productDto.Nation = nationDtos.FirstOrDefault(u => u.Id == productDto.Nat_Id);
+                    if (productDto.Nation == null)
+                    {
+                        throw new Exception($"Nation not found for Product {productDto.Id} with Nat_Id {productDto.Nat_Id}.");
+                    }
+
+                    productDto.Supplier = supplierDtos.FirstOrDefault(u => u.Supplier_ID == productDto.Sup_Id);
+                    if (productDto.Supplier == null)
+                    {
+                        throw new Exception($"Supplier not found for Product {productDto.Id} with Sup_Id {productDto.Sup_Id}.");
+                    }
+
+                    foreach (var productVariationDto in productDto.ProductVariations)
+                    {
+                        productVariationDto.Color = colorDtos.FirstOrDefault(u => u.Id == productVariationDto.Col_Id);
+                        if (productVariationDto.Color == null)
+                        {
+                            throw new Exception($"Color not found for ProductVariation {productVariationDto.Id} with Col_Id {productVariationDto.Col_Id}.");
+                        }
+
+                        productVariationDto.Size = sizeDtos.FirstOrDefault(u => u.Id == productVariationDto.Siz_Id);
+                        if (productVariationDto.Size == null)
+                        {
+                            throw new Exception($"Size not found for ProductVariation {productVariationDto.Id} with Siz_Id {productVariationDto.Siz_Id}.");
+                        }
+                    }
+                }
+
+                _response.Result = productDtos;
             }
             catch (Exception ex)
             {
@@ -38,6 +161,7 @@ namespace Services.ProductAPI.Controllers
             }
             return _response;
         }
+
 
         [HttpGet]
         [Route("{id:int}")]
@@ -178,6 +302,26 @@ namespace Services.ProductAPI.Controllers
             return _response;
         }
 
-        
+        [HttpGet]
+        [Route("products-by-category/{catId:int}")]
+        public async Task<ResponseProductDto> GetByCategory(int catId)
+        {
+            try
+            {
+                IEnumerable<Product> products = await _dbContext.Products
+                    .Include(gr => gr.ProductVariations)
+                    .Where(p => p.Cat_Id == catId)
+                    .ToListAsync();
+
+                _response.Result = _mapper.Map<IEnumerable<ProductDto>>(products);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
     }
 }

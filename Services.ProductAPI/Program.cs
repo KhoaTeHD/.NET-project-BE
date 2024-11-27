@@ -5,6 +5,11 @@ using Microsoft.OpenApi.Models;
 using Service.ProductAPI.Extensions;
 using Services.ProductAPI;
 using Services.ProductAPI.Data;
+using Services.ProductAPI.Service.IService;
+using Services.ProductAPI.Service;
+using Services.ProductAPI.Utility;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Thêm dịch vụ CORS
@@ -25,8 +30,33 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddHttpClient("Brand", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:BrandAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Nation", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:NationAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Category", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:CategoryAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Supplier", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:SupplierAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Size", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:SizeAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Color", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ColorAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<INationService, NationService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddScoped<ISizeService, SizeService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -63,6 +93,7 @@ builder.Services.AddSwaggerGen(option =>
 builder.AddAppAuthentication();
 
 builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
