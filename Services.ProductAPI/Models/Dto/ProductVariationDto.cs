@@ -18,5 +18,6 @@ namespace Services.ProductAPI.Models.Dto
         public Boolean Status { get; set; }
         public ColorDto? Color { get; set; }
         public SizeDto? Size { get; set; }
+        public ProductDto? Product { get; set; }
     }
 }

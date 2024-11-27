@@ -26,7 +26,7 @@ namespace Services.ProductAPI.Models
         [NotMapped]
         public BrandDto Brand { get; set; }
         [NotMapped]
-        public CategoryDto Categoty { get; set; }
+        public CategoryDto Category { get; set; }
         [NotMapped]
         public NationDto Nation { get; set; }
         [NotMapped]

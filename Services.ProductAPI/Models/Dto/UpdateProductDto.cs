@@ -1,4 +1,5 @@
-﻿namespace Services.ProductAPI.Models.Dto
+﻿
+namespace Services.ProductAPI.Models.Dto
 {
     public class UpdateProductDto
     {
@@ -9,5 +10,6 @@
         public int Sup_Id { get; set; }
         public string Name { get; set; }
         public Boolean Status { get; set; }
+        public ICollection<ProductVariationDto>? ProductVariations { get; internal set; }
     }
 }

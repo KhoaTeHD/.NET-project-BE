@@ -1,4 +1,4 @@
-﻿namespace Services.ProductAPI.Models.Dto
+﻿namespace Services.CartItemAPI.Models.Dto
 {
     public class SizeDto
     {

@@ -12,7 +12,7 @@ namespace Services.ProductAPI.Models.Dto
         public int Sup_Id { get; set; }
         public string Name { get; set; }
         public Boolean Status { get; set; }
-        public ICollection<ProductVariation>? ProductVariations { get; set; }
+        public ICollection<ProductVariationDto>? ProductVariations { get; set; }
         public BrandDto? Brand { get; set; }
         public CategoryDto? Category { get; set; }
         public NationDto? Nation { get; set; }

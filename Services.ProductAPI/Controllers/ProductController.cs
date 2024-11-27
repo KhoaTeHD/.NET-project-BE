@@ -113,42 +113,30 @@ namespace Services.ProductAPI.Controllers
                 foreach (var productDto in productDtos)
                 {
                     productDto.Brand = brandDtos.FirstOrDefault(u => u.Id == productDto.Bra_Id);
-                    if (productDto.Brand == null)
-                    {
-                        throw new Exception($"Brand not found for Product {productDto.Id} with Bra_Id {productDto.Bra_Id}.");
-                    }
+                    
 
                     productDto.Category = categoryDtos.FirstOrDefault(u => u.Id == productDto.Cat_Id);
-                    if (productDto.Category == null)
-                    {
-                        throw new Exception($"Category not found for Product {productDto.Id} with Cat_Id {productDto.Cat_Id}.");
-                    }
+                    
 
                     productDto.Nation = nationDtos.FirstOrDefault(u => u.Id == productDto.Nat_Id);
-                    if (productDto.Nation == null)
-                    {
-                        throw new Exception($"Nation not found for Product {productDto.Id} with Nat_Id {productDto.Nat_Id}.");
-                    }
+                    
 
                     productDto.Supplier = supplierDtos.FirstOrDefault(u => u.Supplier_ID == productDto.Sup_Id);
-                    if (productDto.Supplier == null)
-                    {
-                        throw new Exception($"Supplier not found for Product {productDto.Id} with Sup_Id {productDto.Sup_Id}.");
-                    }
+                    
 
                     foreach (var productVariationDto in productDto.ProductVariations)
                     {
                         productVariationDto.Color = colorDtos.FirstOrDefault(u => u.Id == productVariationDto.Col_Id);
-                        if (productVariationDto.Color == null)
-                        {
-                            throw new Exception($"Color not found for ProductVariation {productVariationDto.Id} with Col_Id {productVariationDto.Col_Id}.");
-                        }
+                        //if (productVariationDto.Color == null)
+                        //{
+                        //    throw new Exception($"Color not found for ProductVariation {productVariationDto.Id} with Col_Id {productVariationDto.Col_Id}.");
+                        //}
 
                         productVariationDto.Size = sizeDtos.FirstOrDefault(u => u.Id == productVariationDto.Siz_Id);
-                        if (productVariationDto.Size == null)
-                        {
-                            throw new Exception($"Size not found for ProductVariation {productVariationDto.Id} with Siz_Id {productVariationDto.Siz_Id}.");
-                        }
+                        //if (productVariationDto.Size == null)
+                        //{
+                        //    throw new Exception($"Size not found for ProductVariation {productVariationDto.Id} with Siz_Id {productVariationDto.Siz_Id}.");
+                        //}
                     }
                 }
 
@@ -269,7 +257,7 @@ namespace Services.ProductAPI.Controllers
                 productDto.Sup_Id = updateProductDto.Sup_Id;
                 productDto.Name = updateProductDto.Name;
                 productDto.Status = updateProductDto.Status;
-                productDto.ProductVariations = product.ProductVariations;
+                productDto.ProductVariations = updateProductDto.ProductVariations;
                 _mapper.Map(productDto, product);
 
                 await _dbContext.SaveChangesAsync();

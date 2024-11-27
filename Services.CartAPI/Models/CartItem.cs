@@ -9,7 +9,7 @@ namespace Services.CartItemAPI.Models
     {
         [Key]
         public int Item_Id { get; set; }
-        [Required]
+        [Key]
         public string Cus_Id { get; set; }
         [Required]
         [Column(TypeName = "money")]
@@ -17,6 +17,6 @@ namespace Services.CartItemAPI.Models
         [Required]
         public int Quantity { get; set; }
         [NotMapped]
-        public ProductDto Product { get; set; }
+        public ProductVariationDto ProductVariation { get; set; }
     }
 }

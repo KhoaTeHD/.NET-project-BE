@@ -17,13 +17,13 @@ namespace Services.CartItemAPI.Controllers
         private readonly AppDbContext _dbContext;
         private ResponseCartItemDto _response;
         private IMapper _mapper;
-        private IProductService _productService;
-        public CartItemController(AppDbContext dbContext, IMapper mapper, IProductService productService)
+        private IProductVariationService _productVariationService;
+        public CartItemController(AppDbContext dbContext, IMapper mapper, IProductVariationService productVariationService)
         {
             _dbContext = dbContext;
             _response = new ResponseCartItemDto();
             _mapper = mapper;
-            _productService = productService;
+            _productVariationService = productVariationService;
         }
 
 
@@ -33,7 +33,24 @@ namespace Services.CartItemAPI.Controllers
             try
             {
                 IEnumerable<CartItem> cartItems = await _dbContext.CartItems.ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<CartItemDto>>(cartItems);
+                var cartDtos = _mapper.Map<IEnumerable<CartItemDto>>(cartItems);
+
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                if (productVariationDtos == null || !productVariationDtos.Any())
+                {
+                    throw new Exception("No products found.");
+                }
+
+                foreach (var cartDto in cartDtos)
+                {
+                    cartDto.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == cartDto.Item_Id);
+                    if (cartDto.ProductVariation == null)
+                    {
+                        throw new Exception($"Product not found for Cart {cartDto.Item_Id} ");
+                    }
+                }
+
+                _response.Result = cartDtos;
             }
             catch (Exception ex)
             {
@@ -73,16 +90,16 @@ namespace Services.CartItemAPI.Controllers
                     .ToListAsync();
                 IEnumerable<CartItemDto> cartDtos = _mapper.Map<IEnumerable<CartItemDto>>(cartItems);
 
-                IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
-                if (productDtos == null || !productDtos.Any())
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                if (productVariationDtos == null || !productVariationDtos.Any())
                 {
                     throw new Exception("No products found.");
                 }
 
                 foreach (var cartDto in cartDtos)
                 {
-                    cartDto.Product = productDtos.FirstOrDefault(u => u.Id == cartDto.Item_Id);
-                    if (cartDto.Product == null)
+                    cartDto.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == cartDto.Item_Id);
+                    if (cartDto.ProductVariation == null)
                     {
                         throw new Exception($"Product not found for Cart {cartDto.Item_Id} ");
                     }

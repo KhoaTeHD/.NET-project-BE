@@ -10,7 +10,8 @@ namespace Services.OrderAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Order, OrderDto>();
+                config.CreateMap<Order, OrderDto>()
+                    .ForMember(dest => dest.DetailOrders, opt => opt.MapFrom(src => src.DetailOrders));
                 config.CreateMap<OrderDto, Order>();
                 config.CreateMap<DetailOrder, DetailOrderDto>();
                 config.CreateMap<DetailOrderDto, DetailOrder>();

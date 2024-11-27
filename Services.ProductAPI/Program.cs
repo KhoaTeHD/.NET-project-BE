@@ -22,6 +22,10 @@ builder.Services.AddCors(options =>
                         .AllowCredentials()); // Cho phép sử dụng Cookie hoặc thông tin xác thực nếu cần
 });
 
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
+//        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+
 
 // Add services to the container.
 

@@ -35,7 +35,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductVariationService, ProductVariationService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

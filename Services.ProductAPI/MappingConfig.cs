@@ -10,10 +10,13 @@ namespace Services.ProductAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Product, ProductDto>();
+                config.CreateMap<Product, ProductDto>()
+                        .ForMember(dest => dest.ProductVariations, opt => opt.MapFrom(src => src.ProductVariations));
                 config.CreateMap<ProductDto, Product>();
-                config.CreateMap<ProductVariation, ProductVariationDto>();
+                config.CreateMap<ProductVariation, ProductVariationDto>()
+                        .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product));
                 config.CreateMap<ProductVariationDto, ProductVariation>();
+                    
             });
             return mappingConfig;
         }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Services.OrderAPI.Data;
 using Services.OrderAPI.Models;
 using Services.OrderAPI.Models.Dto;
+using Services.OrderAPI.Service.IService;
 
 namespace Services.OrderAPI.Controllers
 {
@@ -15,12 +16,14 @@ namespace Services.OrderAPI.Controllers
         private readonly AppDbContext _dbContext;
         private ResponseDto _response;
         private IMapper _mapper;
+        private IProductVariationService _productVariationService;
 
-        public OrderController(AppDbContext dbContext, IMapper mapper)
+        public OrderController(AppDbContext dbContext, IMapper mapper, IProductVariationService productVariationService)
         {
             _dbContext = dbContext;
             _response = new ResponseDto();
             _mapper = mapper;
+            _productVariationService = productVariationService;
         }
 
         [HttpGet]
@@ -30,7 +33,19 @@ namespace Services.OrderAPI.Controllers
             try
             {
                 IEnumerable<Order> orders = await _dbContext.Orders.Include(gr => gr.DetailOrders).ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<OrderDto>>(orders);
+                var orderDtos = _mapper.Map<IEnumerable<OrderDto>>(orders);
+
+
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                foreach (var orderDto in orderDtos)
+                {
+                    foreach (var detail in orderDto.DetailOrders)
+                    {
+                        detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);
+                    }
+                }
+
+                _response.Result = orderDtos;
             }
             catch (Exception ex)
             {
@@ -42,7 +57,7 @@ namespace Services.OrderAPI.Controllers
 
         [HttpGet("{id:int}")]
         [Authorize(Roles = "ADMIN,CUSTOMER")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseDto> Get(int id, OrderDto orderDtos)
         {
             try
             {
@@ -57,7 +72,16 @@ namespace Services.OrderAPI.Controllers
                     return _response;
                 }
 
-                _response.Result = _mapper.Map<OrderDto>(order);
+                var orderDto = _mapper.Map<OrderDto>(order);
+
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+
+                foreach (var detail in orderDto.DetailOrders)
+                {
+                    detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);
+                }
+
+                _response.Result = orderDtos;
             }
             catch (Exception ex)
             {

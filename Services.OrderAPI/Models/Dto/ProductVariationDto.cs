@@ -13,5 +13,8 @@
         public string Desc { get; set; }
         public int Discount { get; set; }
         public Boolean Status { get; set; }
+        public ColorDto? Color { get; set; }
+        public SizeDto? Size { get; set; }
+        public ProductDto? Product { get; set; }
     }
 }

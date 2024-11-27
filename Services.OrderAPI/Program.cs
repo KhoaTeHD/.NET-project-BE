@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service.OrderAPI.Extensions;
+using Services.OrderAPI.Utility;
 using Services.OrderAPI;
 using Services.OrderAPI.Data;
+using Services.OrderAPI.Service;
+using Services.OrderAPI.Service.IService;
+using Services.OrderAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +30,14 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddScoped<IProductVariationService, ProductVariationService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
+
+builder.Services.AddHttpClient("Product", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
 // Add services to the container.
 
