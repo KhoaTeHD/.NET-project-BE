@@ -5,6 +5,9 @@ using Microsoft.OpenApi.Models;
 using Service.CartItemAPI.Extensions;
 using Services.CartItemAPI;
 using Services.CartItemAPI.Data;
+using Services.CartItemAPI.Service;
+using Services.CartItemAPI.Service.IService;
+using Services.CartItemAPI.Utility;
 var builder = WebApplication.CreateBuilder(args);
 
 // Thêm dịch vụ CORS
@@ -25,7 +28,14 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddHttpClient("Product", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -62,6 +72,8 @@ builder.Services.AddSwaggerGen(option =>
 builder.AddAppAuthentication();
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

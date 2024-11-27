@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Services.ProductAPI.Models.Dto;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Services.ProductAPI.Models
@@ -21,5 +23,13 @@ namespace Services.ProductAPI.Models
         public Boolean Status { get; set; }
         [JsonIgnore]
         public ICollection<ProductVariation>? ProductVariations { get; set; }
+        [NotMapped]
+        public BrandDto Brand { get; set; }
+        [NotMapped]
+        public CategoryDto Categoty { get; set; }
+        [NotMapped]
+        public NationDto Nation { get; set; }
+        [NotMapped]
+        public SupplierDto Supplier { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Services.ProductAPI.Models.Dto;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
@@ -33,5 +34,9 @@ namespace Services.ProductAPI.Models
         [JsonIgnore]
         [ForeignKey("Pro_Id")]
         public Product Product { get; set; }
+        [NotMapped]
+        public ColorDto Color { get; set; }
+        [NotMapped]
+        public SizeDto Size { get; set; }
     }
 }

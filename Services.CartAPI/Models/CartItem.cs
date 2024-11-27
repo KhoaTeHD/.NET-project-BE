@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Services.CartItemAPI.Models.Dto;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlTypes;
 
@@ -15,5 +16,7 @@ namespace Services.CartItemAPI.Models
         public decimal Price { get; set; }
         [Required]
         public int Quantity { get; set; }
+        [NotMapped]
+        public ProductDto Product { get; set; }
     }
 }

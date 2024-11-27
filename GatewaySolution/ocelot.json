@@ -1,6 +1,7 @@
 {
   "Routes": [
     // Supplier -----------------------------------------
+
     {
       "DownstreamPathTemplate": "/api/Supplier",
       "DownstreamScheme": "https",
@@ -349,6 +350,18 @@
     },
     // Nation -----------------------------------------
     {
+      "DownstreamPathTemplate": "/api/Nation",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7009
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Nation",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/Nation/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -373,7 +386,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Nation",
-      "UpstreamHttpMethod": [ "POST", "PUT", "Get" ],
+      "UpstreamHttpMethod": [ "POST", "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
