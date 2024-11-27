@@ -13,7 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Ocelot" Version="23.3.6" />
+    <PackageReference Include="Ocelot" Version="19.0.2" />
   </ItemGroup>
 
 </Project>

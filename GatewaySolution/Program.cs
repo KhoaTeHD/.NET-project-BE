@@ -1,4 +1,5 @@
-﻿using GatewaySolution.Extensions;
+﻿using GatewaySolution;
+using GatewaySolution.Extensions;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Values;
@@ -15,18 +16,21 @@ builder.Services.AddCors(options =>
                         .AllowCredentials()); // Cho phép sử dụng Cookie hoặc thông tin xác thực nếu cần
 });
 
+builder.Services.AddOcelot()
+    .AddDelegatingHandler<RemoveReasonPhraseHandler>();
+
+
 builder.AddAppAuthentication();
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-builder.Services.AddOcelot(builder.Configuration);
+//builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
 
 // Sử dụng CORS
 app.UseCors("AllowAngularApp");
 
-app.UseOcelot();
+app.MapGet("/", () => "Hello World!");
 app.UseOcelot().GetAwaiter().GetResult();
 
 

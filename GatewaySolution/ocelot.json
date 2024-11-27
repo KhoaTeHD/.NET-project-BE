@@ -45,21 +45,6 @@
     },
     // Address -----------------------------------------
     {
-      "DownstreamPathTemplate": "/api/Address",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/Address",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/Address/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -84,7 +69,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Address",
-      "UpstreamHttpMethod": [ "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
