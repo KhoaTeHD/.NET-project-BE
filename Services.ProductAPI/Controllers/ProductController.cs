@@ -178,6 +178,26 @@ namespace Services.ProductAPI.Controllers
             return _response;
         }
 
-        
+        [HttpGet]
+        [Route("products-by-category/{catId:int}")]
+        public async Task<ResponseProductDto> GetByCategory(int catId)
+        {
+            try
+            {
+                IEnumerable<Product> products = await _dbContext.Products
+                    .Include(gr => gr.ProductVariations)
+                    .Where(p => p.Cat_Id == catId)
+                    .ToListAsync();
+
+                _response.Result = _mapper.Map<IEnumerable<ProductDto>>(products);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
     }
 }

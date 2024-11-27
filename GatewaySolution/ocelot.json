@@ -464,6 +464,18 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+    {
+      "DownstreamPathTemplate": "/api/Product/products-by-category/{catId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7011
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product/products-by-category/{catId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
 
     // ProductVariation -----------------------------------------
     {
