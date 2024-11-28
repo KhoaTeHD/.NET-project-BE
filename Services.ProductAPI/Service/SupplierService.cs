@@ -15,13 +15,21 @@ namespace Services.ProductAPI.Service
         {
             var client = _clientFactory.CreateClient("Supplier");
             var response = await client.GetAsync("https://localhost:7777/api/Supplier");
-            var apiContet = await response.Content.ReadAsStringAsync();
-            var resp = JsonConvert.DeserializeObject<ResponseProductDto>(apiContet);
-            if (resp.IsSuccess)
+
+            if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<IEnumerable<SupplierDto>>(Convert.ToString(resp.Result));
+                var apiContet = await response.Content.ReadAsStringAsync();
+                if (!string.IsNullOrEmpty(apiContet))
+                {
+                    var resp = JsonConvert.DeserializeObject<ResponseProductDto>(apiContet);
+                    if (resp != null && resp.IsSuccess)
+                    {
+                        return JsonConvert.DeserializeObject<IEnumerable<SupplierDto>>(Convert.ToString(resp.Result));
+                    }
+                }
             }
             return new List<SupplierDto>();
         }
+
     }
 }
