@@ -35,38 +35,13 @@ namespace Services.ProductAPI.Controllers
         {
             try
             {
-                IEnumerable<ProductVariation> productVariations = (IEnumerable<ProductVariation>) await _dbContext.ProductVariations.Include(pv => pv.Product)
-                    .Select(pv => new ProductVariation
-                    {
-                        Id = pv.Id,
-                        Pro_Id = pv.Pro_Id,
-                        Col_Id = pv.Col_Id,
-                        Siz_Id = pv.Siz_Id,
-                        Price = pv.Price,
-                        ImportPrice = pv.ImportPrice,
-                        Pic = pv.Pic,
-                        Quantity = pv.Quantity,
-                        Desc = pv.Desc,
-                        Discount = pv.Discount,
-                        Status = pv.Status,
-                        Color = pv.Color,
-                        Size = pv.Size,
-                        Product = new Product
-                        {
-                            Id = pv.Product.Id,
-                            Name = pv.Product.Name,
-                            Status = pv.Product.Status,
-                            Bra_Id = pv.Product.Bra_Id,
-                            Cat_Id = pv.Product.Cat_Id,
-                            Nat_Id = pv.Product.Nat_Id,
-                            Sup_Id = pv.Product.Sup_Id,
-                            Category = pv.Product.Category,
-                            Brand = pv.Product.Brand,
-                            Nation = pv.Product.Nation,
-                            Supplier = pv.Product.Supplier
-                        }
-
-                    }).ToListAsync();
+                IEnumerable<ProductVariation> productVariations = (IEnumerable<ProductVariation>) await _dbContext.ProductVariations
+                    .Include(pv => pv.Product)
+                    //    .ThenInclude(p => p.Brand)
+                    //.Include(pv => pv.Product.Category)
+                    //.Include(pv => pv.Product.Nation)
+                    //.Include(pv => pv.Product.Supplier)
+                    .ToListAsync();
                 IEnumerable<ProductVariationDto> productVariationDtos = _mapper.Map<IEnumerable<ProductVariationDto>>(productVariations);
 
                 IEnumerable<ColorDto> colorDtos = await _colorService.GetColors();
