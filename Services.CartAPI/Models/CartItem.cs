@@ -16,7 +16,9 @@ namespace Services.CartItemAPI.Models
         public decimal Price { get; set; }
         [Required]
         public int Quantity { get; set; }
-        [NotMapped]
+        [ForeignKey("Item_Id")]
         public ProductVariationDto ProductVariation { get; set; }
+        [ForeignKey("Cus_Id")]
+        public UserDto User { get; set; }
     }
 }
