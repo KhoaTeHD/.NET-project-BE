@@ -2,6 +2,7 @@
 {
     public class SupplierDto
     {
+
         public int Supplier_ID { get; set; }
 
         public string SupplierName { get; set; }

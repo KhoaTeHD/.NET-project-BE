@@ -7,18 +7,21 @@ namespace Services.CartItemAPI.Models
 {
     public class CartItem
     {
-        [Key]
+        // Xóa thuộc tính [Key] ở đây vì chúng ta sẽ định nghĩa khóa chính phức hợp
         public int Item_Id { get; set; }
-        [Key]
         public string Cus_Id { get; set; }
+
         [Required]
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
+
         [Required]
         public int Quantity { get; set; }
+
         [ForeignKey("Item_Id")]
-        public ProductVariationDto ProductVariation { get; set; }
+        public required ProductVariationDto ProductVariation { get; set; }
+
         [ForeignKey("Cus_Id")]
-        public UserDto User { get; set; }
+        public required UserDto User { get; set; }
     }
 }
