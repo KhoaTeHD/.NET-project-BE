@@ -60,10 +60,12 @@ namespace Services.AuthAPI.Service
             {
                 ID = user.Id,
                 Name = user.Name,
+                AvatarUrl = user.AvatarUrl,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 BirthDate = user.BirthDate,
-                Gender = user.Gender
+                Gender = user.Gender,
+                Status = user.Status,
             };
 
             LoginResponseDto loginResponseDto = new LoginResponseDto()
@@ -85,7 +87,7 @@ namespace Services.AuthAPI.Service
                 PhoneNumber = registerationRequestDto.PhoneNumber,
                 Gender = registerationRequestDto.Gender,
                 BirthDate = registerationRequestDto.BirthDate,
-                Status = registerationRequestDto.Status
+                Status = registerationRequestDto.Status,
             };
 
             try
@@ -93,16 +95,6 @@ namespace Services.AuthAPI.Service
                 var result = await _userManager.CreateAsync(user, registerationRequestDto.Password);
                 if (result.Succeeded)
                 {
-                    //Cần trả về userDTO thì trả về đoạn này
-                    var userToReturn = _context.ApplicationUsers.First(u => u.UserName == user.Email);
-
-                    UserDto userDto = new()
-                    {
-                        ID = userToReturn.Id,
-                        Name = userToReturn.Name,
-                        Email = userToReturn.Email,
-                        PhoneNumber = userToReturn.PhoneNumber
-                    };
                     return "";
                 } 
                 else

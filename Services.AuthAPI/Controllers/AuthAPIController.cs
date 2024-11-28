@@ -70,7 +70,6 @@ namespace Services.AuthAPI.Controllers
 
         // GET: api/user
         [HttpGet]
-        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetListUser()
         {
             try
@@ -130,5 +129,77 @@ namespace Services.AuthAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("checkUnique")]
+        public async Task<IActionResult> CheckUnique(string field, string value)
+        {
+            bool isUnique = field.ToLower() switch
+            {
+                "email" => !await _dbContext.Users.AnyAsync(u => u.Email == value),
+                "phonenumber" => !await _dbContext.Users.AnyAsync(u => u.PhoneNumber == value),
+                _ => throw new ArgumentException("Invalid field")
+            };
+            return Ok(isUnique);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto updateUserDto)
+        {
+            try
+            {
+                // Tìm người dùng cần cập nhật
+                var user = await _dbContext.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                // Cập nhật thông tin người dùng từ DTO
+                user.Name = updateUserDto.Name;
+                user.Email = updateUserDto.Email;
+                user.NormalizedEmail = updateUserDto.Email.ToUpper();
+                user.UserName = updateUserDto.Email;
+                user.NormalizedUserName = updateUserDto.Email.ToUpper();
+                user.AvatarUrl = updateUserDto.AvatarUrl;
+                user.PhoneNumber = updateUserDto.PhoneNumber;
+                user.BirthDate = updateUserDto.BirthDate;
+                user.Gender = updateUserDto.Gender;
+                user.Status = updateUserDto.Status;
+
+                // Lưu thay đổi
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
+
+                // Trả về kết quả
+                var updatedUserDto = _mapper.Map<UserDto>(user);
+                return Ok(updatedUserDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DbUpdateException: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("checkDuplicateForUpdate")]
+        public async Task<IActionResult> CheckDuplicateForUpdate(string userId, string field, string value)
+        {
+            if (string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
+            {
+                return BadRequest("Field and value are required.");
+            }
+
+            bool isDuplicate = field.ToLower() switch
+            {
+                "email" => await _dbContext.Users.AnyAsync(u => u.Email == value && u.Id != userId),
+                "phonenumber" => await _dbContext.Users.AnyAsync(u => u.PhoneNumber == value && u.Id != userId),
+                _ => throw new ArgumentException("Invalid field")
+            };
+
+            return Ok(isDuplicate);
+        }
+
+
     }
 }
