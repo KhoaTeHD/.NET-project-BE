@@ -26,6 +26,13 @@ builder.Services.AddCors(options =>
 //    .AddJsonOptions(options =>
 //        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        //options.JsonSerializerOptions.MaxDepth = 3; // Giới hạn độ sâu tối đa là 3
+    });
+
 
 // Add services to the container.
 

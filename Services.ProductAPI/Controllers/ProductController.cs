@@ -97,10 +97,10 @@ namespace Services.ProductAPI.Controllers
                 {
                     throw new Exception("No nations found.");
                 }
-                if (supplierDtos == null || !supplierDtos.Any())
-                {
-                    throw new Exception("No suppliers found.");
-                }
+                //if (supplierDtos == null || !supplierDtos.Any())
+                //{
+                //    throw new Exception("No suppliers found.");
+                //}
                 if (colorDtos == null || !colorDtos.Any())
                 {
                     throw new Exception("No color found.");
