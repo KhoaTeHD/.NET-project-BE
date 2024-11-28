@@ -168,7 +168,48 @@ namespace Services.ProductAPI.Controllers
                     return _response;
                 }
 
-                _response.Result = _mapper.Map<ProductDto>(product);
+                ProductDto productDto = _mapper.Map<ProductDto>(product);
+
+                IEnumerable<BrandDto> brandDtos = await _brandService.GetBrands();
+                IEnumerable<CategoryDto> categoryDtos = await _categoryService.GetCategorys();
+                IEnumerable<NationDto> nationDtos = await _nationService.GetNations();
+                IEnumerable<SupplierDto> supplierDtos = await _supplierService.GetSuppliers();
+                IEnumerable<ColorDto> colorDtos = await _colorService.GetColors();
+                IEnumerable<SizeDto> sizeDtos = await _sizeService.GetSizes();
+
+                if (brandDtos == null || !brandDtos.Any())
+                {
+                    throw new Exception("No brands found.");
+                }
+                if (categoryDtos == null || !categoryDtos.Any())
+                {
+                    throw new Exception("No categories found.");
+                }
+                if (nationDtos == null || !nationDtos.Any())
+                {
+                    throw new Exception("No nations found.");
+                }
+                if (colorDtos == null || !colorDtos.Any())
+                {
+                    throw new Exception("No color found.");
+                }
+                if (sizeDtos == null || !sizeDtos.Any())
+                {
+                    throw new Exception("No sizes found.");
+                }
+
+                productDto.Brand = brandDtos.FirstOrDefault(u => u.Id == productDto.Bra_Id);
+                productDto.Category = categoryDtos.FirstOrDefault(u => u.Id == productDto.Cat_Id);
+                productDto.Nation = nationDtos.FirstOrDefault(u => u.Id == productDto.Nat_Id);
+                productDto.Supplier = supplierDtos.FirstOrDefault(u => u.Supplier_ID == productDto.Sup_Id);
+
+                foreach (var productVariationDto in productDto.ProductVariations)
+                {
+                    productVariationDto.Color = colorDtos.FirstOrDefault(u => u.Id == productVariationDto.Col_Id);
+                    productVariationDto.Size = sizeDtos.FirstOrDefault(u => u.Id == productVariationDto.Siz_Id);
+                }
+
+                _response.Result = productDto;
             }
             catch (Exception ex)
             {
@@ -177,6 +218,7 @@ namespace Services.ProductAPI.Controllers
             }
             return _response;
         }
+
 
         [HttpPost]
         [Route("create")]
