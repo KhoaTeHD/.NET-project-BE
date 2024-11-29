@@ -17,13 +17,12 @@ namespace Services.CartItemAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             // Định nghĩa khóa chính phức hợp từ Item_Id và Cus_Id
             modelBuilder.Entity<CartItem>()
                 .HasKey(ci => new { ci.Item_Id, ci.Cus_Id });
 
-            // Các cấu hình khác (nếu có)
-            base.OnModelCreating(modelBuilder);
 
             //modelBuilder.Entity<CartItem>().HasData(new CartItem
             //{

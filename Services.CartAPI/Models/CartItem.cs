@@ -18,10 +18,8 @@ namespace Services.CartItemAPI.Models
         [Required]
         public int Quantity { get; set; }
 
-        [ForeignKey("Item_Id")]
-        public required ProductVariationDto ProductVariation { get; set; }
+        [NotMapped]
+        public ProductVariationDto? ProductVariation { get; set; }
 
-        [ForeignKey("Cus_Id")]
-        public required UserDto User { get; set; }
     }
 }
