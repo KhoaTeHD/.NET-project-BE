@@ -156,7 +156,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/CartItem",
-      "UpstreamHttpMethod": [ "POST", "PUT", "Get" ],
+      "UpstreamHttpMethod": [ "POST", "PUT", "Get", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }

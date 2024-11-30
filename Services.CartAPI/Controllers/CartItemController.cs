@@ -121,11 +121,31 @@ namespace Services.CartItemAPI.Controllers
         {
             try
             {
-                CartItem cartItem = _mapper.Map<CartItem>(cartItemDTO);
-                await _dbContext.CartItems.AddAsync(cartItem);
-                await _dbContext.SaveChangesAsync();
+                // Get the list of cart items for the customer
+                var existingCartItemsResponse = await GetByCustomerId(cartItemDTO.Cus_Id);
+                if (!existingCartItemsResponse.IsSuccess)
+                {
+                    throw new Exception(existingCartItemsResponse.Message);
+                }
 
-                _response.Result = _mapper.Map<CartItemDto>(cartItem);
+                var existingCartItems = existingCartItemsResponse.Result as IEnumerable<CartItemDto>;
+                var existingCartItem = existingCartItems?.FirstOrDefault(c => c.Item_Id == cartItemDTO.Item_Id);
+
+                if (existingCartItem != null)
+                {
+                    // If the item already exists, update the quantity
+                    existingCartItem.Quantity += 1;
+                    return await Put(existingCartItem);
+                }
+                else
+                {
+                    // If the item does not exist, add it to the database
+                    CartItem cartItem = _mapper.Map<CartItem>(cartItemDTO);
+                    await _dbContext.CartItems.AddAsync(cartItem);
+                    await _dbContext.SaveChangesAsync();
+
+                    _response.Result = _mapper.Map<CartItemDto>(cartItem);
+                }
             }
             catch (Exception ex)
             {
@@ -134,6 +154,7 @@ namespace Services.CartItemAPI.Controllers
             }
             return _response;
         }
+
 
         [HttpPut]
         public async Task<ResponseCartItemDto> Put([FromBody] CartItemDto cartItemDTO)
