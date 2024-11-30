@@ -221,7 +221,6 @@ namespace Services.ProductAPI.Controllers
 
 
         [HttpPost]
-        [Route("create")]
         [Authorize(Roles = "ADMIN")]
         public async Task<ResponseProductDto> Post([FromBody] CreateProductDto createProductDto)
         {
