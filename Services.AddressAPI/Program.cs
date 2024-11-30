@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Service.AddressAPI.Extensions;
+using Service.AdressAPI.Extensions;
 using Services.AddressAPI;
 using Services.AddressAPI.Data;
 
@@ -77,14 +77,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 
 // Sử dụng CORS
 app.UseCors("AllowAngularApp");
-
 //Auth
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
