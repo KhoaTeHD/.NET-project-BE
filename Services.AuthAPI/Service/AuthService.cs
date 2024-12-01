@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Service.AuthAPI.Data;
 using Services.AuthAPI.Models;
 using Services.AuthAPI.Models.Dto;
@@ -35,6 +36,32 @@ namespace Services.AuthAPI.Service
                 return true;
             }
             return false;
+        }
+
+        public async Task<string> ChangePassword(string userId, string oldPassword, string newPassword)
+        {
+            // Find the user by ID
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return "User not found";
+            }
+
+            // Check if the old password is correct
+            var isOldPasswordValid = await _userManager.CheckPasswordAsync(user, oldPassword);
+            if (!isOldPasswordValid)
+            {
+                return "Old password is incorrect";
+            }
+
+            // Change the password
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (result.Succeeded)
+            {
+                return "Password changed successfully";
+            }
+
+            return result.Errors.FirstOrDefault()?.Description ?? "Error changing password";
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -106,6 +133,86 @@ namespace Services.AuthAPI.Service
             {
                 throw ex;
             }
+        }
+
+        public async Task<LoginResponseDto> UpdateUser(string id, UserDto updateUserDto)
+        {
+            // Tìm người dùng cần cập nhật
+            var user = _context.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return new LoginResponseDto
+                {
+                    User = null,
+                    Token = ""
+                };
+            }
+
+            // Cập nhật thông tin người dùng từ DTO
+            if (updateUserDto.Name != user.Name)
+            {
+                user.Name = updateUserDto.Name;
+            }
+
+            if (updateUserDto.Email != user.Email)
+            {
+                user.Email = updateUserDto.Email;
+                user.NormalizedEmail = updateUserDto.Email.ToUpper();
+                user.UserName = updateUserDto.Email;
+                user.NormalizedUserName = updateUserDto.Email.ToUpper();
+            }
+
+            if (updateUserDto.AvatarUrl != user.AvatarUrl)
+            {
+                user.AvatarUrl = updateUserDto.AvatarUrl;
+            }
+
+            if (updateUserDto.PhoneNumber != user.PhoneNumber)
+            {
+                user.PhoneNumber = updateUserDto.PhoneNumber;
+            }
+
+            if (updateUserDto.BirthDate != user.BirthDate)
+            {
+                user.BirthDate = updateUserDto.BirthDate;
+            }
+
+            if (updateUserDto.Gender != user.Gender)
+            {
+                user.Gender = updateUserDto.Gender;
+            }
+
+            if (updateUserDto.Status != user.Status)
+            {
+                user.Status = updateUserDto.Status;
+            }
+
+            // Lưu thay đổi
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            //if user was found, Generate JWT Token
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
+
+            UserDto userDto = new()
+            {
+                ID = user.Id,
+                Name = user.Name,
+                AvatarUrl = user.AvatarUrl,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                BirthDate = user.BirthDate,
+                Gender = user.Gender,
+                Status = user.Status,
+            };
+
+            LoginResponseDto loginResponseDto = new LoginResponseDto()
+            {
+                User = userDto,
+                Token = token
+            };
+            return loginResponseDto;
         }
     }
 }

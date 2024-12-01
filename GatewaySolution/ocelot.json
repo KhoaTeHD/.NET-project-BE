@@ -75,6 +75,21 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+    {
+      "DownstreamPathTemplate": "/api/Address/set-default/{addressId}/{customerId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Address/set-default/{addressId}/{customerId}",
+      "UpstreamHttpMethod": ["PUT"],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
     // Brand -----------------------------------------
     {
       "DownstreamPathTemplate": "/api/Brand",
