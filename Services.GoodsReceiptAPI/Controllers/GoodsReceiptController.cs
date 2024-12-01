@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Services.GoodsReceiptAPI.Data;
 using Services.GoodsReceiptAPI.Models;
 using Services.GoodsReceiptAPI.Models.Dto;
+using Services.GoodsReceiptAPI.Service.IService;
 
 namespace Services.GoodsReceiptAPI.Controllers
 {
@@ -15,12 +16,14 @@ namespace Services.GoodsReceiptAPI.Controllers
         private readonly AppDbContext _dbContext;
         private ResponseDto _response;
         private IMapper _mapper;
+        private IProductVariationService _productVariationService;
 
-        public GoodsReceiptController(AppDbContext dbContext, IMapper mapper)
+        public GoodsReceiptController(AppDbContext dbContext, IMapper mapper, IProductVariationService productVariationService)
         {
             _dbContext = dbContext;
             _response = new ResponseDto();
             _mapper = mapper;
+            _productVariationService = productVariationService;
         }
 
         [HttpGet]
@@ -32,7 +35,20 @@ namespace Services.GoodsReceiptAPI.Controllers
                 IEnumerable<GoodsReceipt> goodsReceipts = await _dbContext.GoodsReceipts
                     .Include(gr => gr.DetailGoodsReceipts)
                     .ToListAsync();
-                _response.Result = _mapper.Map<IEnumerable<GoodsReceiptDto>>(goodsReceipts);
+                var receipts = _mapper.Map<IEnumerable<GoodsReceiptDto>>(goodsReceipts);
+
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+
+                foreach (var receipt in receipts)
+                {
+                    foreach (var detail in receipt.DetailGoodsReceipts)
+                    {
+                        //Console.WriteLine(productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID).Id);
+                        detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);
+                    }
+                }
+
+                _response.Result = receipts;
             }
             catch (Exception ex)
             {
@@ -59,7 +75,15 @@ namespace Services.GoodsReceiptAPI.Controllers
                     return _response;
                 }
 
-                _response.Result = _mapper.Map<GoodsReceiptDto>(goodsReceipt);
+                var receipt = _mapper.Map<GoodsReceiptDto>(goodsReceipt);
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+
+                foreach (var detail in receipt.DetailGoodsReceipts)
+                {
+                    detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);
+                }
+
+                _response.Result = receipt;
             }
             catch (Exception ex)
             {

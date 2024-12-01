@@ -6,5 +6,7 @@
         public int Product_ID { get; set; }
         public int Quantity { get; set; }
         public decimal Unit_Price { get; set; }
+
+        public ProductVariationDto? ProductVariation { get; set; }
     }
 }
