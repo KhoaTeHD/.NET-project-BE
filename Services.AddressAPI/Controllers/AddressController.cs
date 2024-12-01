@@ -24,6 +24,7 @@ namespace Services.AddressAPI.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet]
         [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Get()
@@ -149,6 +150,5 @@ namespace Services.AddressAPI.Controllers
 
             return _response;
         }
-
     }
 }
