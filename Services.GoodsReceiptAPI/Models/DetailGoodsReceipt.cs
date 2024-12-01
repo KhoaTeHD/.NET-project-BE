@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Services.GoodsReceiptAPI.Models.Dto;
 
 namespace Services.GoodsReceiptAPI.Models
 {
@@ -22,5 +23,8 @@ namespace Services.GoodsReceiptAPI.Models
         // Navigation property
         [ForeignKey("Goo_ID")]
         public GoodsReceipt GoodsReceipt { get; set; }
+
+        [NotMapped]
+        public ProductVariationDto? ProductVariation { get; set; }
     }
 }

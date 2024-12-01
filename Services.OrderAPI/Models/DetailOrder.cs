@@ -24,6 +24,6 @@ namespace Services.OrderAPI.Models
         public Order Order { get; set; }
 
         [NotMapped]
-        public ProductVariationDto ProductVariation { get; set; }
+        public ProductVariationDto? ProductVariation { get; set; }
     }
 }
