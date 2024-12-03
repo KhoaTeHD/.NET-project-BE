@@ -71,6 +71,7 @@ namespace Services.AuthAPI.Controllers
 
         // GET: api/user
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetListUser()
         {
             try
