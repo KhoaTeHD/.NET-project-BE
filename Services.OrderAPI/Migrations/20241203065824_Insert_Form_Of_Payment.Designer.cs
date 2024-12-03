@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Services.OrderAPI.Data;
 
@@ -11,9 +12,11 @@ using Services.OrderAPI.Data;
 namespace Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241203065824_Insert_Form_Of_Payment")]
+    partial class Insert_Form_Of_Payment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +142,6 @@ namespace Services.OrderAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Shipping_Charge")
-                        .HasColumnType("money");
-
                     b.Property<decimal>("Total")
                         .HasColumnType("money");
 
@@ -155,7 +155,7 @@ namespace Services.OrderAPI.Migrations
                             Order_ID = 1L,
                             Address = "123 Main St",
                             Customer_ID = "101",
-                            Datetime = new DateTime(2024, 11, 23, 14, 7, 15, 41, DateTimeKind.Local).AddTicks(4598),
+                            Datetime = new DateTime(2024, 11, 23, 13, 58, 22, 158, DateTimeKind.Local).AddTicks(1603),
                             Discount_amount = 5m,
                             OrderStatus = "Completed",
                             Total = 150m
@@ -166,7 +166,7 @@ namespace Services.OrderAPI.Migrations
                             Address = "456 Elm St",
                             Coupon_Code = 2001,
                             Customer_ID = "102",
-                            Datetime = new DateTime(2024, 11, 28, 14, 7, 15, 41, DateTimeKind.Local).AddTicks(4622),
+                            Datetime = new DateTime(2024, 11, 28, 13, 58, 22, 158, DateTimeKind.Local).AddTicks(1625),
                             Discount_amount = 10m,
                             OrderStatus = "Pending",
                             Total = 200m
@@ -176,7 +176,7 @@ namespace Services.OrderAPI.Migrations
                             Order_ID = 3L,
                             Address = "789 Oak St",
                             Customer_ID = "103",
-                            Datetime = new DateTime(2024, 12, 3, 14, 7, 15, 41, DateTimeKind.Local).AddTicks(4641),
+                            Datetime = new DateTime(2024, 12, 3, 13, 58, 22, 158, DateTimeKind.Local).AddTicks(1628),
                             Discount_amount = 0m,
                             OrderStatus = "Shipped",
                             Total = 250m

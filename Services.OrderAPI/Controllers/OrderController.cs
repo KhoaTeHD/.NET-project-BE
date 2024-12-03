@@ -212,23 +212,63 @@ namespace Services.OrderAPI.Controllers
         {
             try
             {
-                // Lấy danh sách Order theo Customer_ID
-                IEnumerable<Order> orders = await _dbContext.Orders
-                    .Include(o => o.DetailOrders) // Bao gồm các chi tiết của Order
-                    .Where(o => o.Customer_ID == customerId) // Lọc theo Customer_ID
-                    .ToListAsync();
+                IEnumerable<Order> orders = await _dbContext.Orders.Include(gr => gr.DetailOrders).Where(gr => gr.Customer_ID == customerId).ToListAsync();
+                var orderDtos = _mapper.Map<IEnumerable<OrderDto>>(orders);
 
-                // Map danh sách Order sang DTO
-                _response.Result = _mapper.Map<IEnumerable<OrderDto>>(orders);
+
+                IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                foreach (var orderDto in orderDtos)
+                {
+                    foreach (var detail in orderDto.DetailOrders)
+                    {
+                        detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);
+                    }
+                }
+
+                _response.Result = orderDtos;
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
-
             return _response;
         }
+
+        [HttpPut("{id:int}/status")]
+        [Authorize(Roles = "ADMIN, CUSTOMER")]
+        public async Task<ResponseDto> SetOrderStatus(int id, [FromBody] string newStatus)
+        {
+            try
+            {
+                // Tìm order theo ID
+                Order? order = await _dbContext.Orders.FirstOrDefaultAsync(o => o.Order_ID == id);
+
+                if (order == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Order not found.";
+                    return _response;
+                }
+
+                // Cập nhật trạng thái đơn hàng
+                order.OrderStatus = newStatus;
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                _dbContext.Orders.Update(order);
+                await _dbContext.SaveChangesAsync();
+
+                // Trả về kết quả
+                _response.Result = _mapper.Map<OrderDto>(order);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
 
     }
 }
