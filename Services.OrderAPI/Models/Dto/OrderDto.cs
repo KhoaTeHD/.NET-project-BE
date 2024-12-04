@@ -18,6 +18,10 @@
 
         public string OrderStatus { get; set; }
 
+        public string? FormOfPayment { get; set; }
+
+        public decimal? Shipping_Charge { get; set; }
+
         // List of detail orders
         public List<DetailOrderDto> DetailOrders { get; set; }
     }

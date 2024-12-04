@@ -8,6 +8,7 @@ using Service.AuthAPI.Models.Dto;
 using Services.AuthAPI.Models;
 using Services.AuthAPI.Models.Dto;
 using Services.AuthAPI.Service.IService;
+using System.Security.Claims;
 
 namespace Services.AuthAPI.Controllers
 {
@@ -70,6 +71,7 @@ namespace Services.AuthAPI.Controllers
 
         // GET: api/user
         [HttpGet]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetListUser()
         {
             try
@@ -146,40 +148,15 @@ namespace Services.AuthAPI.Controllers
         [Authorize(Roles = "ADMIN,CUSTOMER")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto updateUserDto)
         {
-            try
+            var loginResponse = await _authService.UpdateUser(id, updateUserDto);
+            if (loginResponse.User == null)
             {
-                // Tìm người dùng cần cập nhật
-                var user = await _dbContext.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound("User not found.");
-                }
-
-                // Cập nhật thông tin người dùng từ DTO
-                user.Name = updateUserDto.Name;
-                user.Email = updateUserDto.Email;
-                user.NormalizedEmail = updateUserDto.Email.ToUpper();
-                user.UserName = updateUserDto.Email;
-                user.NormalizedUserName = updateUserDto.Email.ToUpper();
-                user.AvatarUrl = updateUserDto.AvatarUrl;
-                user.PhoneNumber = updateUserDto.PhoneNumber;
-                user.BirthDate = updateUserDto.BirthDate;
-                user.Gender = updateUserDto.Gender;
-                user.Status = updateUserDto.Status;
-
-                // Lưu thay đổi
-                _dbContext.Users.Update(user);
-                await _dbContext.SaveChangesAsync();
-
-                // Trả về kết quả
-                var updatedUserDto = _mapper.Map<UserDto>(user);
-                return Ok(updatedUserDto);
+                _response.IsSuccess = false;
+                _response.Message = "Failed to update user!";
+                return BadRequest(_response);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DbUpdateException: {ex.Message}");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            _response.Result = loginResponse;
+            return Ok(_response);
         }
 
         [HttpGet("checkDuplicateForUpdate")]
@@ -200,6 +177,30 @@ namespace Services.AuthAPI.Controllers
             return Ok(isDuplicate);
         }
 
+        // POST: api/auth/change-password
+        [HttpPost("change-password")]
+        [Authorize(Roles = "ADMIN,CUSTOMER")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto changePasswordRequestDto)
+        {
+            if (changePasswordRequestDto == null || string.IsNullOrEmpty(changePasswordRequestDto.OldPassword) || string.IsNullOrEmpty(changePasswordRequestDto.NewPassword))
+            {
+                return BadRequest("Old and new password must be provided.");
+            }
+
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value; // Assuming user ID is stored as a claim
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            var result = await _authService.ChangePassword(userId, changePasswordRequestDto.OldPassword, changePasswordRequestDto.NewPassword);
+            if (result == "Password changed successfully")
+            {
+                return Ok(new { Message = result });
+            }
+
+            return BadRequest(new { Message = result });
+        }
 
     }
 }

@@ -24,9 +24,13 @@ namespace Services.OrderAPI.Models
         public decimal Discount_amount { get; set; }
 
         [Column(TypeName = "money")]
+        public decimal? Shipping_Charge { get; set; }
+
+        [Column(TypeName = "money")]
         public decimal Total { get; set; }
 
         public string OrderStatus { get; set; }
+        public string? FormOfPayment { get; set; }
 
         // Navigation property
         public ICollection<DetailOrder> DetailOrders { get; set; }
