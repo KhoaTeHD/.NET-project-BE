@@ -17,7 +17,7 @@ namespace Services.CouponAPI.Data
 
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
-                Coupon_Code = 1,
+                Coupon_Code = "NEWYEAR2025",
                 StartDate = new DateTime(2024, 11, 1),
                 ExpirationDate = new DateTime(2024, 12, 1),
                 CouponName = "SUMMER2024",
@@ -28,7 +28,7 @@ namespace Services.CouponAPI.Data
 
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
-                Coupon_Code = 2,
+                Coupon_Code = "20/11",
                 StartDate = new DateTime(2024, 11, 15),
                 ExpirationDate = new DateTime(2025, 1, 15),
                 CouponName = "WINTER2024",

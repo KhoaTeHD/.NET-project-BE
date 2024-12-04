@@ -26,5 +26,8 @@ namespace Services.GoodsReceiptAPI.Models
 
         [NotMapped]
         public ProductVariationDto? ProductVariation { get; set; }
+
+        [NotMapped]
+        public SupplierDto? Supplier { get; set; }
     }
 }

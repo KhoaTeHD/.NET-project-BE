@@ -17,13 +17,15 @@ namespace Services.GoodsReceiptAPI.Controllers
         private ResponseDto _response;
         private IMapper _mapper;
         private IProductVariationService _productVariationService;
+        private ISupplierService _supplierService;
 
-        public GoodsReceiptController(AppDbContext dbContext, IMapper mapper, IProductVariationService productVariationService)
+        public GoodsReceiptController(AppDbContext dbContext, IMapper mapper, IProductVariationService productVariationService, ISupplierService supplierService)
         {
             _dbContext = dbContext;
             _response = new ResponseDto();
             _mapper = mapper;
             _productVariationService = productVariationService;
+            _supplierService = supplierService;
         }
 
         [HttpGet]
@@ -38,9 +40,11 @@ namespace Services.GoodsReceiptAPI.Controllers
                 var receipts = _mapper.Map<IEnumerable<GoodsReceiptDto>>(goodsReceipts);
 
                 IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                IEnumerable<SupplierDto> supplierDtos = await _supplierService.GetSuppliers();
 
                 foreach (var receipt in receipts)
                 {
+                    receipt.Supplier = supplierDtos.FirstOrDefault(u => u.Supplier_ID == receipt.Supplier_ID);
                     foreach (var detail in receipt.DetailGoodsReceipts)
                     {
                         //Console.WriteLine(productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID).Id);
@@ -77,7 +81,9 @@ namespace Services.GoodsReceiptAPI.Controllers
 
                 var receipt = _mapper.Map<GoodsReceiptDto>(goodsReceipt);
                 IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                IEnumerable<SupplierDto> supplierDtos = await _supplierService.GetSuppliers();
 
+                receipt.Supplier = supplierDtos.FirstOrDefault(u => u.Supplier_ID == receipt.Supplier_ID);
                 foreach (var detail in receipt.DetailGoodsReceipts)
                 {
                     detail.ProductVariation = productVariationDtos.FirstOrDefault(u => u.Id == detail.Product_ID);

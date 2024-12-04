@@ -42,9 +42,9 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ResponseDto> Get(int id)
+        public async Task<ResponseDto> Get(string id)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Services.CouponAPI.Controllers
 
         [HttpDelete]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ResponseDto> Delete(int id)
+        public async Task<ResponseDto> Delete(string id)
         {
             try
             {

@@ -2,7 +2,7 @@
 {
     public class CouponDto
     {
-        public int Coupon_Code { get; set; }
+        public string Coupon_Code { get; set; }
 
         public DateTime StartDate { get; set; }
 

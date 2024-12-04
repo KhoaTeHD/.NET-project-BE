@@ -42,7 +42,8 @@ namespace Services.ProductAPI.Controllers
                     //.Include(pv => pv.Product.Nation)
                     //.Include(pv => pv.Product.Supplier)
                     .ToListAsync();
-                IEnumerable<ProductVariationDto> productVariationDtos = _mapper.Map<IEnumerable<ProductVariationDto>>(productVariations);
+
+                IEnumerable <ProductVariationDto> productVariationDtos = _mapper.Map<IEnumerable<ProductVariationDto>>(productVariations);
 
                 IEnumerable<ColorDto> colorDtos = await _colorService.GetColors();
                 IEnumerable<SizeDto> sizeDtos = await _sizeService.GetSizes();

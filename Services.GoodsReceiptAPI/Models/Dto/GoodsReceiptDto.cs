@@ -9,5 +9,7 @@
 
         // Danh sách chi tiết GoodsReceipt
         public List<DetailGoodsReceiptDto> DetailGoodsReceipts { get; set; }
+
+        public SupplierDto? Supplier { get; set; }
     }
 }
