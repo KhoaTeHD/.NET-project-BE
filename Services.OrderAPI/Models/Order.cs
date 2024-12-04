@@ -11,7 +11,7 @@ namespace Services.OrderAPI.Models
         [Required]
         public string Customer_ID { get; set; }
 
-        public int? Coupon_Code { get; set; }
+        public string? Coupon_Code { get; set; }
 
         [Required]
         [MaxLength(200)]

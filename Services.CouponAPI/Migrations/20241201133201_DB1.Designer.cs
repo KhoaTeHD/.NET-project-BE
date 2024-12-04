@@ -12,8 +12,8 @@ using Services.CouponAPI.Data;
 namespace Services.CouponAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241107055445_M_Coupon_Db")]
-    partial class M_Coupon_Db
+    [Migration("20241201133201_DB1")]
+    partial class DB1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,8 @@ namespace Services.CouponAPI.Migrations
 
             modelBuilder.Entity("Services.CouponAPI.Models.Coupon", b =>
                 {
-                    b.Property<int>("Coupon_Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Coupon_Code"));
+                    b.Property<string>("Coupon_Code")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CouponName")
                         .IsRequired()
@@ -62,7 +59,7 @@ namespace Services.CouponAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Coupon_Code = 1,
+                            Coupon_Code = "NEWYEAR2025",
                             CouponName = "SUMMER2024",
                             Discount = 15.5f,
                             ExpirationDate = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -72,7 +69,7 @@ namespace Services.CouponAPI.Migrations
                         },
                         new
                         {
-                            Coupon_Code = 2,
+                            Coupon_Code = "20/11",
                             CouponName = "WINTER2024",
                             Discount = 20000f,
                             ExpirationDate = new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),

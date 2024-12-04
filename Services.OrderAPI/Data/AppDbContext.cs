@@ -41,7 +41,7 @@ namespace Services.OrderAPI.Data
                 {
                     Order_ID = 2,
                     Customer_ID = "102",
-                    Coupon_Code = 2001,
+                    Coupon_Code = "2001",
                     Address = "456 Elm St",
                     Datetime = DateTime.Now.AddDays(-5),
                     Discount_amount = 10,

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Services.CouponAPI.Models
 {
     public class Coupon
     {
         [Key]
-        public int Coupon_Code { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string Coupon_Code { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]

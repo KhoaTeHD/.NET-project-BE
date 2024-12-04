@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Service.GoodsReceiptAPI.Extensions;
 using Services.GoodsReceiptAPI;
 using Services.GoodsReceiptAPI.Data;
+using Services.GoodsReceiptAPI.Service;
 using Services.GoodsReceiptAPI.Service.IService;
 using Services.GoodsReceiptAPI.Utility;
 using Services.OrdeGoodsReceiptAPIrAPI.Service;
@@ -27,7 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddScoped<IProductVariationService, ProductVariationService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
@@ -35,6 +36,12 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddHttpClient("Supplier", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:SupplierAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddScoped<IProductVariationService, ProductVariationService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
 // Add services to the container.
 
