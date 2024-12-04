@@ -25,7 +25,7 @@ namespace Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, CUSTOMER")]
         public async Task<ResponseDto> Get()
         {
             try

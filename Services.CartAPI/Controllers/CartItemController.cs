@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.CartItemAPI.Data;
@@ -199,6 +200,40 @@ namespace Services.CartItemAPI.Controllers
                     return _response;
                 }
 
+                _dbContext.CartItems.Remove(cartItem);
+                await _dbContext.SaveChangesAsync();
+
+                _response.IsSuccess = true;
+                _response.Message = "Cart item deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        [Authorize(Roles= "CUSTOMER")]
+        public async Task<ResponseCartItemDto> DeleteCartItemById(int id)
+        {
+            try
+            {
+                // Tìm CartItem theo Id
+                CartItem? cartItem = await _dbContext.CartItems.FirstOrDefaultAsync(c => c.Item_Id == id);
+
+                if (cartItem == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Cart item not found.";
+                    return _response;
+                }
+
+                // Xóa CartItem khỏi database
                 _dbContext.CartItems.Remove(cartItem);
                 await _dbContext.SaveChangesAsync();
 
