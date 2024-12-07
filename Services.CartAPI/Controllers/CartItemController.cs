@@ -172,6 +172,7 @@ namespace Services.CartItemAPI.Controllers
                     return _response;
                 }
 
+                cartItem.Quantity = cartItemDTO.Quantity;
                 _mapper.Map(cartItemDTO, cartItem);
                 await _dbContext.SaveChangesAsync();
 
