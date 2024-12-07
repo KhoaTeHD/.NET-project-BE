@@ -13,7 +13,7 @@ namespace Services.ProductAPI.Models.Dto
         public decimal ImportPrice { get; set; }
         public string Pic { get; set; }
         public int Quantity { get; set; }
-        public string Desc { get; set; }
+        public string? Desc { get; set; }
         public int Discount { get; set; }
         public Boolean Status { get; set; }
         public ColorDto? Color { get; set; }
