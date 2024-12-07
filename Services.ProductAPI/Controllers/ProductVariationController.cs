@@ -164,5 +164,72 @@ namespace Services.ProductAPI.Controllers
             }
             return _response;
         }
+
+        [HttpPut]
+        [Route("addQuantity/{id:int}/{quantity:int}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ResponseProductVariationDto> addQuantity(int id,int quantity)
+        {
+            try
+            {
+
+                ProductVariation? productVariation = await _dbContext.ProductVariations.FindAsync(id);
+
+                if (productVariation == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Product Variation not found.";
+                    return _response;
+                }
+                productVariation.Quantity += quantity;
+
+                await _dbContext.SaveChangesAsync();
+
+                _response.Result = _mapper.Map<ProductVariationDto>(productVariation);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpPut]
+        [Route("subQuantity/{id:int}/{quantity:int}")]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ResponseProductVariationDto> subQuantity(int id, int quantity)
+        {
+            try
+            {
+
+                ProductVariation? productVariation = await _dbContext.ProductVariations.FindAsync(id);
+
+                if (productVariation == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Product Variation not found.";
+                    return _response;
+                }
+                productVariation.Quantity -= quantity;
+
+                if (productVariation.Quantity < 0)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Quantity không được âm!";
+                    return _response;
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                _response.Result = _mapper.Map<ProductVariationDto>(productVariation);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace Services.OrderAPI.Controllers
 
 
                 IEnumerable<ProductVariationDto> productVariationDtos = await _productVariationService.GetProductVariations();
+                Console.WriteLine(productVariationDtos.Count());
                 foreach (var orderDto in orderDtos)
                 {
                     foreach (var detail in orderDto.DetailOrders)
