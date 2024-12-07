@@ -197,7 +197,7 @@ namespace Services.ProductAPI.Controllers
 
         [HttpPut]
         [Route("subQuantity/{id:int}/{quantity:int}")]
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN, CUSTOMER")]
         public async Task<ResponseProductVariationDto> subQuantity(int id, int quantity)
         {
             try

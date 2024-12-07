@@ -93,7 +93,7 @@ namespace Services.OrderAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "CUSTOMER")]
+        [Authorize(Roles = "CUSTOMER, ADMIN")]
         public async Task<ResponseDto> Post([FromBody] OrderDto orderDto)
         {
             try
